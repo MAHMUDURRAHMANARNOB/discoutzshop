@@ -14,6 +14,7 @@ class _UserDashboardState extends State<UserDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(automaticallyImplyLeading: false,backgroundColor: TColors.primaryColor,),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

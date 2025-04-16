@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       filled: true,
                       fillColor: Colors.grey[100],
+
                     ),
                   ),
                 ),
@@ -351,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 80,
           child: Text(
             label,
-            style: TextStyle(fontSize: 12, color: Colors.black),
+            style: TextStyle(fontSize: 10, color: Colors.black),
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

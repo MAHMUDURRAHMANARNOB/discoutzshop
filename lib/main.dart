@@ -14,7 +14,7 @@ class DiscountZShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home:/*LoginScreen()*/HomeScreen(),
       theme: TAppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
     );
