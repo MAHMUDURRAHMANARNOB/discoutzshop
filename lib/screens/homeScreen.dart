@@ -1,3 +1,4 @@
+import 'package:discountzshop/screens/widgets/categoryGrid.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,36 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: TColors.primaryColor,
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.menu,
+            color: TColors.white,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.favorite_border,
+              color: TColors.white,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(64), color: TColors.white),
+            child: Icon(
+              Icons.person_2_outlined,
+              color: TColors.primaryColor,
+            ),
+          )
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -34,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       filled: true,
                       fillColor: Colors.grey[100],
-
                     ),
                   ),
                 ),
@@ -53,46 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 // Categories
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 16.0),
-                  child: Wrap(
-                    spacing: 16.0,
-                    runSpacing: 16.0,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      _buildCategoryItem(Icons.toys, 'Babies & Toys'),
-                      _buildCategoryItem(Icons.chair, 'Home & Decor'),
-                      _buildCategoryItem(
-                          Icons.electrical_services, 'Electrical & Gadget'),
-                      _buildCategoryItem(
-                          Icons.face_retouching_natural, 'Beauty & Care'),
-                      _buildCategoryItem(Icons.flight, 'Travel & Tourism'),
-                      _buildCategoryItem(
-                          Icons.sports_baseball, 'Sports & Outdoors'),
-                      _buildCategoryItem(Icons.subscriptions, 'Subscriptions'),
-                      _buildCategoryItem(Icons.restaurant, 'Food & Restaurant'),
-                    ],
-                  ),
-                ),
-                // See More Button
-                Center(
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.orange),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    ),
-                    child: Text(
-                      'See More',
-                      style: TextStyle(color: Colors.orange, fontSize: 16),
-                    ),
-                  ),
-                ),
+                CategoryGrid(),
+
                 // Available Coupon Search
                 Container(
                   padding: EdgeInsets.all(12),
@@ -100,23 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Row(
                         children: [
-                      
-                          Text("Available Coupon",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                          Text(
+                            "Available Coupon",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
                           SizedBox(width: 5),
-                          Icon(Iconsax.ticket_discount5, color: TColors.primaryColor,size: 28),
-                          // TextField(
-                          //   decoration: InputDecoration(
-                          //     hintText: 'Search Coupon',
-                          //
-                          //
-                          //     border: OutlineInputBorder(
-                          //       borderRadius: BorderRadius.circular(12),
-                          //       borderSide: BorderSide(color: Colors.grey[300]!),
-                          //     ),
-                          //     // filled: true,
-                          //     // fillColor: Colors.grey[100],
-                          //   ),
-                          // ),
+                          Icon(Iconsax.ticket_discount5,
+                              color: TColors.primaryColor, size: 28),
                         ],
                       ),
                       SizedBox(height: TSizes.sm),
@@ -287,33 +270,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: 'Offers',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: 'Brands',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.storefront),
-            label: 'Stores',
-          ),
-        ],
-      ),
     );
   }
 
@@ -366,7 +322,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: EdgeInsets.only(right: 10.0),
       padding: EdgeInsets.all(5),
-      color: TColors.tealAccent.withOpacity(0.1),
+      decoration: BoxDecoration(
+        color: TColors.tealAccent.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
       width: 200,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -376,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: TColors.grey,
+              color: TColors.white,
             ),
             child: Image.network(
               imageUrl,
@@ -426,6 +385,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.only(right: 12.0),
       child: Chip(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(64),
+            side: BorderSide(color: isSelected ? TColors.primaryColor:TColors.grey)),
         label: Text(
           title,
           style: TextStyle(
