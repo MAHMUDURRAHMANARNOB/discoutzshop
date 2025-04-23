@@ -48,7 +48,7 @@ class _OverviewTabState extends State<OverviewTab> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          'https://umrelo.com/wp-content/uploads/2025/01/Oraimo-Watch-5-Lite-9-768x768.png.webp', // Replace with actual image URL
+                          'https://www.startech.com.bd/image/cache/catalog/smart-watch/oraimo/watch-5/oraimo-watch-5-berry-grey-500x500.webp', // Replace with actual image URL
                           width: 150,
                           height: 100,
                           fit: BoxFit.cover,

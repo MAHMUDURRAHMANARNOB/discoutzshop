@@ -1,3 +1,4 @@
+import 'package:discountzshop/features/authentication/login/screens/LoginScreen.dart';
 import 'package:discountzshop/screens/widgets/categoryGrid.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
@@ -33,14 +34,23 @@ class _HomeScreenState extends State<HomeScreen> {
               color: TColors.white,
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(right: 10),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(64), color: TColors.white),
-            child: Icon(
-              Icons.person_2_outlined,
-              color: TColors.primaryColor,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(64),
+                  color: TColors.white),
+              child: Icon(
+                Icons.person_2_outlined,
+                color: TColors.primaryColor,
+              ),
             ),
           )
         ],
@@ -124,17 +134,74 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 // Deals Tabs
                 Container(
-                  height: 50,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: TColors.primaryColor.withOpacity(0.05),
+                  ),
+                  child: Column(
                     children: [
-                      _buildTab('Hot Deals', true),
-                      _buildTab('Cashback', false),
-                      _buildTab('Flat %', false),
-                      _buildTab('Buy 1 Get 1', false),
-                      _buildTab('Upto 50% Off', false),
-                      _buildTab('More', false),
+                      Container(
+                        height: 50,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          children: [
+                            _buildTab('Hot Deals', true),
+                            _buildTab('Cashback', false),
+                            _buildTab('Flat %', false),
+                            _buildTab('Buy 1 Get 1', false),
+                            _buildTab('Upto 50% Off', false),
+                            _buildTab('More', false),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 230,
+                        padding: const EdgeInsets.all(8.0),
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // 3 columns
+                            crossAxisSpacing: 8.0, // Spacing between columns
+                            mainAxisSpacing: 8.0, // Spacing between rows
+                            childAspectRatio: 2, // Square cells
+                          ),
+                          itemCount: 6, // 2 rows * 3 columns = 6 items
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Image.network(
+                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPcWd9rLxJz2GRqCuNTtye_oSQGJB1C3s8xg&s",
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.0),
+                                  Text(
+                                    '30% OFF',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: TColors.secondaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -162,7 +229,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Container(
-                  height: 250,
+                  height: 50,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    children: [
+                      _buildTab('Hot Deals', true),
+                      _buildTab('Cashback', false),
+                      _buildTab('Flat %', false),
+                      _buildTab('Buy 1 Get 1', false),
+                      _buildTab('Upto 50% Off', false),
+                      _buildTab('More', false),
+                    ],
+                  ),
+                ),
+                SizedBox(height: TSizes.spaceBtwItems),
+                Container(
+                  height: 280,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -178,6 +261,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: TSizes.sm),
+                Container(
+                  height: 280,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    children: [
+                      _buildDeal('Flat 30% OFF', '25 April 2024',
+                          'https://plus.unsplash.com/premium_photo-1674815329488-c4fc6bf4ced8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                      _buildDeal('Flat 30% OFF', '25 April 2024',
+                          'https://plus.unsplash.com/premium_photo-1674815329488-c4fc6bf4ced8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                      _buildDeal('Flat 30% OFF', '25 April 2024',
+                          'https://plus.unsplash.com/premium_photo-1674815329488-c4fc6bf4ced8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                      _buildDeal('Flat 30% OFF', '25 April 2024',
+                          'https://plus.unsplash.com/premium_photo-1674815329488-c4fc6bf4ced8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: TSizes.spaceBtwItems),
                 // Additional Banners
                 Container(
                   height: 150,
@@ -193,46 +296,288 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 // Product Listings
-                Padding(
+                /*Container(
+                  width: double.infinity,
+                  height: 200,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // 2 items per row
+                        crossAxisSpacing: 16.0,
+                        mainAxisSpacing: 16.0,
+                        childAspectRatio: 0.7, // Adjust the aspect ratio to fit content
+                      ),
+                      itemCount: 4, // Number of items
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          elevation: 4.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Image at the top
+                              ClipRRect(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16.0),
+                                ),
+                                child: Image.network(
+                                  'https://via.placeholder.com/150', // Placeholder image URL
+                                  height: 120,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Title
+                                    Text(
+                                      'Syltherine',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    // Subtitle
+                                    Text(
+                                      'Stylish cafe chair',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    // Price
+                                    Text(
+                                      'BDT 2,500',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      'BDT 3,500',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    // Buy Now Button
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        child: Text('Buy Now'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),*/
+                SizedBox(height: TSizes.spaceBtwItems),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.pinkAccent.withOpacity(0.1),
+                  ),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 16.0),
-                  child: Wrap(
-                    spacing: 16.0,
-                    runSpacing: 16.0,
+                      horizontal: 6.0, vertical: 16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildProduct(
+                      Flexible(
+                        flex: 2,
+                        child: _buildProduct(
                           'Sytherine',
                           'Stylish cafe chair',
                           'BDT 2,500',
-                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildProduct(
-                          'Sytherine',
-                          'Stylish cafe chair',
-                          'BDT 2,500',
-                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildProduct(
-                          'Sytherine',
-                          'Stylish cafe chair',
-                          'BDT 2,500',
-                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildProduct(
-                          'Sytherine',
-                          'Stylish cafe chair',
-                          'BDT 2,500',
-                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildProduct(
-                          'Sytherine',
-                          'Stylish cafe chair',
-                          'BDT 2,500',
-                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildProduct(
-                          'Sytherine',
-                          'Stylish cafe chair',
-                          'BDT 2,500',
-                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Flexible(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            _buildProductHorizontal(
+                              'Sytherine',
+                              'Stylish cafe chair',
+                              'BDT 2,500',
+                              'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                            ),
+                            SizedBox(height: 16),
+                            _buildProductHorizontal(
+                              'Sytherine',
+                              'Stylish cafe chair',
+                              'BDT 2,500',
+                              'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
+
+                // Monitors
+                SizedBox(height: TSizes.spaceBtwItems),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.lightBlueAccent.withOpacity(0.1),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildProduct(
+                          'Sytherine',
+                          'Stylish cafe chair',
+                          'BDT 2,500',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyTBVZKemRyQpZxelXzx2NHgsF_IgLx3j_1w&s',
+                        ),
+                      ),
+                      SizedBox(width: TSizes.sm),
+                      Expanded(
+                        child: _buildProduct(
+                          'Sytherine',
+                          'Stylish cafe chair',
+                          'BDT 2,500',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyTBVZKemRyQpZxelXzx2NHgsF_IgLx3j_1w&s',
+                        ),
+                      ),
+                      SizedBox(width: TSizes.sm),
+                      Expanded(
+                        child: _buildProduct(
+                          'Sytherine',
+                          'Stylish cafe chair',
+                          'BDT 2,500',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyTBVZKemRyQpZxelXzx2NHgsF_IgLx3j_1w&s',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Belts
+                SizedBox(height: TSizes.spaceBtwItems),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.lightBlueAccent.withOpacity(0.1),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildProduct(
+                          'Sytherine',
+                          'Stylish cafe chair',
+                          'BDT 2,500',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV6VgPuMyIJlOK5goJCGjDS4NR4wxYyDNMmQ&s',
+                        ),
+                      ),
+                      SizedBox(width: TSizes.sm),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              8),
+                          child: Image.network(
+                            "https://fabrilife.com/products/6505bbdf8f0c2-square.png",
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 320,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: TSizes.sm),
+                      Expanded(
+                        child: _buildProduct(
+                          'Sytherine',
+                          'Stylish cafe chair',
+                          'BDT 2,500',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkEFQeYkfSQ23-Dc92oeQI4abxDcrpRpHUYw&s',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Smarphones
+                SizedBox(height: TSizes.spaceBtwItems),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.pinkAccent.withOpacity(0.1),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: _buildProduct(
+                          'iPhone',
+                          'iPhone 16 Pro Max',
+                          'BDT 1,21,500',
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwnjRu2piR1q7hR_dy4OVQsuY2aPXU8rOhpg&s',
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Flexible(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            _buildProductHorizontal(
+                              'Samsung',
+                              'Samsung S25 Ultra 5g',
+                              'BDT 1,22,000',
+                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Fz1YScUkysiCy8G54_iNRiKag6nGHxN__Q&s',
+                            ),
+                            SizedBox(height: 16),
+                            _buildProductHorizontal(
+                              'Sytherine',
+                              'Stylish cafe chair',
+                              'BDT 2,500',
+                              'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 // Partner Brands
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -387,7 +732,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Chip(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(64),
-            side: BorderSide(color: isSelected ? TColors.primaryColor:TColors.grey)),
+            side: BorderSide(
+                color: isSelected ? TColors.primaryColor : TColors.grey)),
         label: Text(
           title,
           style: TextStyle(
@@ -448,9 +794,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDeal(String discount, String date, String imageUrl) {
     return Container(
       margin: EdgeInsets.only(right: 12.0),
-      width: 150,
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: TColors.grey),
+      ),
+      width: 180,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
@@ -465,22 +816,47 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             discount,
             style: TextStyle(
-              color: Colors.orange,
+              color: TColors.black,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 4),
           Text(
-            'FREEDEL24',
+            "Daraz Free Delivery Festival",
             style: TextStyle(
-              color: Colors.grey,
               fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+          SizedBox(height: 4),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(64),
+              color: TColors.primaryColor.withOpacity(0.1),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Iconsax.ticket_discount),
+                SizedBox(width: 5),
+                Text(
+                  'FREEDEL24',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: TColors.darkerGrey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 4),
           Text(
-            date,
+            "Expires on: $date",
             style: TextStyle(
               color: Colors.grey,
               fontSize: 12,
@@ -492,15 +868,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildProduct(
-      String brand, String name, String price, String imageUrl) {
+    String brand,
+    String name,
+    String price,
+    String imageUrl,
+  ) {
     return Container(
-      width: (MediaQuery.of(context).size.width - 48) /
-          2, // Adjust for padding and spacing
+      decoration: BoxDecoration(
+        color: TColors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      height: 320,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(8), topLeft: Radius.circular(8)),
             child: Image.network(
               imageUrl,
               fit: BoxFit.cover,
@@ -508,44 +892,132 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
             ),
           ),
-          SizedBox(height: 8),
-          Text(
-            brand,
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 8),
+                Text(
+                  brand,
+                  style: TextStyle(
+                    color: TColors.darkerGrey,
+                    fontSize: 12,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: TColors.darkGrey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  price,
+                  style: TextStyle(
+                    color: TColors.darkerGrey,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4),
+                TextButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: TColors.black,
+                    minimumSize: Size(10, 36),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(64),
+                    ),
+                  ),
+                  child: Text(
+                    'Buy Now',
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 4),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            price,
-            style: TextStyle(
-              color: Colors.orange,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 4),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              minimumSize: Size(double.infinity, 36),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductHorizontal(
+      String brand, String name, String price, String imageUrl) {
+    return Container(
+      decoration: BoxDecoration(
+        color: TColors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      height: 150,
+      width: double.infinity, // Adjust for padding and spacing
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    brand,
+                    style: TextStyle(
+                      color: TColors.darkerGrey,
+                      fontSize: 12,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: TColors.darkGrey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    price,
+                    style: TextStyle(
+                      color: TColors.darkerGrey,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  TextButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.black,
+                      minimumSize: Size(10, 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(64),
+                      ),
+                    ),
+                    child: Text(
+                      'Buy Now',
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Text(
-              'Buy Now',
-              style: TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(8),
+                  topRight: Radius.circular(8)),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 150,
+              ),
             ),
           ),
         ],

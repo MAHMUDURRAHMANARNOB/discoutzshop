@@ -173,30 +173,7 @@ class _DetailedInformationState extends State<DetailedInformation> {
           ),
         ),
       ),
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: TColors.primaryColor,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1, // Highlight the second item (location icon)
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: '',
-          ),
-        ],
-      ),
+
     );
 
   }

@@ -9,10 +9,11 @@ import 'offersTab.dart';
 class OfferDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String appbarName = "Overview";
     return Scaffold(
       appBar: AppBar(
         
-        title: Text('Offer Details'),
+        title: Text(appbarName),
         centerTitle: true,
         actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
       ),

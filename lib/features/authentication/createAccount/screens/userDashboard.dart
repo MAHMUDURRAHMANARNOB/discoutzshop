@@ -378,30 +378,7 @@ class _UserDashboardState extends State<UserDashboard> {
           ),
         ),
       ),
-      // Bottom Navigation Bar (not visible in the image, but included for consistency)
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Color(0xFFFF3D00),
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: '',
-          ),
-        ],
-      ),
+
     );
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../offers/screens/offerDetailsMainScreen.dart';
+
 class StoresScreen extends StatefulWidget {
   @override
   State<StoresScreen> createState() => _StoresScreenState();
@@ -156,73 +158,81 @@ class StoreCard extends StatefulWidget {
 class _StoreCardState extends State<StoreCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Color(0xFFFFF5F0), // Light peach background
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Icon(
-                Icons.store,
-                color: Colors.orange,
-                size: 20,
-              ),
-            ),
-            SizedBox(height: 8),
-            // Logo Placeholder (since we don't have actual logos)
-            /*Container(
-              height: 40,
-              child: Text(
-                logo.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: logo == 'apex' ? Colors.red : Colors.black,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  OfferDetailsScreen()),
+        );
+      },
+      child: Card(
+        color: Color(0xFFFFF5F0), // Light peach background
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Icon(
+                  Icons.store,
+                  color: Colors.orange,
+                  size: 20,
                 ),
               ),
-            ),*/
-            Expanded(
-              child: Image.network(
-                widget.logo, width: double.infinity,
-                // height: imageHeight,
-                // Slightly increased height for better visuals
-                fit: BoxFit.contain,
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              widget.name,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on,
-                  color: Colors.red,
-                  size: 16,
-                ),
-                SizedBox(width: 4),
-                Text(
-                  widget.location,
+              SizedBox(height: 8),
+              // Logo Placeholder (since we don't have actual logos)
+              /*Container(
+                height: 40,
+                child: Text(
+                  logo.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: logo == 'apex' ? Colors.red : Colors.black,
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),*/
+              Expanded(
+                child: Image.network(
+                  widget.logo, width: double.infinity,
+                  // height: imageHeight,
+                  // Slightly increased height for better visuals
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                widget.name,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 16,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    widget.location,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

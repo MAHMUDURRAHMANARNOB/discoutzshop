@@ -133,30 +133,7 @@ class _OTPVerificationState extends State<OTPVerification> {
           ),
         ),
       ),
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: '',
-          ),
-        ],
-      ),
+
     );
   }
 }

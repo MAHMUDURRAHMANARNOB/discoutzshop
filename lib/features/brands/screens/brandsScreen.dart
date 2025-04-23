@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/constants/colors.dart';
+import '../../offers/screens/offerDetailsMainScreen.dart';
 
 class BrandsScreen extends StatefulWidget {
   const BrandsScreen({super.key});
@@ -14,8 +16,15 @@ class _BrandsScreenState extends State<BrandsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Brands'),
-        leading: Icon(Icons.arrow_back),
+        title: Text("Brands"),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(CupertinoIcons.search),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -32,13 +41,13 @@ class _BrandsScreenState extends State<BrandsScreen> {
             _buildSection(
               title: 'Beauty & Care',
               items: [
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png', // Replace with actual URLs
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg', // Replace with actual URLs
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
               ],
             ),
@@ -46,13 +55,13 @@ class _BrandsScreenState extends State<BrandsScreen> {
             _buildSection(
               title: 'Fashion & Lifestyle',
               items: [
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
               ],
             ),
@@ -60,13 +69,13 @@ class _BrandsScreenState extends State<BrandsScreen> {
             _buildSection(
               title: 'Beauty & Care',
               items: [
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
               ],
               showSeeMore: true,
@@ -75,9 +84,9 @@ class _BrandsScreenState extends State<BrandsScreen> {
             _buildSection(
               title: 'Electronics & Gadgets',
               items: [
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://www.foodpanda.com/wp-content/uploads/2024/05/foodpanda-logo-RGB-stacked.png',
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
               ],
             ),
@@ -128,24 +137,32 @@ class _BrandsScreenState extends State<BrandsScreen> {
             ),
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 3,
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  OfferDetailsScreen()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Image.network(
+                      items[index],
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.contain,
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Image.network(
-                    items[index],
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.contain,
                   ),
                 ),
               );

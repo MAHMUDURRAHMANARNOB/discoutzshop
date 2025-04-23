@@ -111,30 +111,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
           ),
         ),
       ),
-      // Bottom Navigation Bar (for consistency with previous screens)
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: TColors.primaryColor,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: '',
-          ),
-        ],
-      ),
+
     );
   }
 }
