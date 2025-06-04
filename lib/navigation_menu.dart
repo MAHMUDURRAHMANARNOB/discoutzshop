@@ -2,13 +2,13 @@ import 'package:discountzshop/features/brands/screens/brandsScreen.dart';
 import 'package:discountzshop/features/maps/screens/mapsScreen.dart';
 import 'package:discountzshop/features/offers/screens/offerScreen.dart';
 import 'package:discountzshop/features/stores/screens/storesScreen.dart';
-import 'package:discountzshop/screens/homeScreen.dart';
+import 'package:discountzshop/features/homeDashboard/screens/homeScreen.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});

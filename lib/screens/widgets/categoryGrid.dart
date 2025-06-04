@@ -54,48 +54,51 @@ class _CategoryGridState extends State<CategoryGrid> {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: _showAll
-              ? ElevatedButton(
+              ? TextButton(
             onPressed: () {
               setState(() {
                 _showAll = false; // Collapse back to 8 items
               });
             },
-            style: ElevatedButton.styleFrom(
+            style: TextButton.styleFrom(
               backgroundColor: TColors.primaryColor, // Button color
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(34.0),
               ),
               padding: const EdgeInsets.symmetric(
-                  horizontal: 32.0, vertical: 12.0),
+                  horizontal: 20.0),
             ),
             child: const Text(
-              'COLLAPSE',
+              'Collapse',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
             ),
           )
               : (_categories.length > 8
-              ? ElevatedButton(
+              ? TextButton(
             onPressed: () {
               setState(() {
                 _showAll = true; // Show all items
               });
             },
-            style: ElevatedButton.styleFrom(
+            style: TextButton.styleFrom(
               backgroundColor: TColors.primaryColor, // Button color
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(64.0),
               ),
               padding: const EdgeInsets.symmetric(
-                  horizontal: 32.0, vertical: 12.0),
+                  horizontal: 20.0),
             ),
-            child: const Text(
-              'SEE MORE',
+            child:  Text(
+              'See More',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+                fontSize: 12,
+
               ),
             ),
           )

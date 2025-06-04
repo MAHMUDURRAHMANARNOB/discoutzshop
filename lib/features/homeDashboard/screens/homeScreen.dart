@@ -1,9 +1,22 @@
+import 'dart:async';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:discountzshop/features/authentication/login/screens/LoginScreen.dart';
+import 'package:discountzshop/features/homeDashboard/screens/widgets/AvaiableCouponWidget.dart';
+import 'widgets/DottedContainer.dart';
 import 'package:discountzshop/screens/widgets/categoryGrid.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
+import 'package:discountzshop/utils/helpers/helper_function.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../providers/firstSliderProvider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,8 +26,76 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // final ScrollController _firstSliderScrollController = ScrollController();
+
+  //First slider
+  final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
+
+  // Timer? _firstSliderTimer;
+  // int _firstSliderCurrentIndex = 0;
+  Future<void>? _fetchSlidersFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    // Start auto-scrolling after the first frame to ensure sliders are loaded
+    /*WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<FirstSliderProvider>(context, listen: false);
+      if (provider.sliders.isNotEmpty) {
+        startAutoScrollFirstSlider(provider.sliders.length);
+      }
+    });*/
+    final provider = Provider.of<FirstSliderProvider>(context, listen: false);
+    _fetchSlidersFuture = provider.fetchSliders();
+  }
+
+  /*void startAutoScrollFirstSlider(int itemCount) {
+    _firstSliderTimer?.cancel();
+    _firstSliderTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          _firstSliderCurrentIndex = (_firstSliderCurrentIndex + 1) % itemCount; // Loop back to 0
+        });
+        // Animate to the next item (width: 300 + 12 margin)
+        _firstSliderScrollController.animateTo(
+          _firstSliderCurrentIndex * (300 + 12),
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }*/
+  /*void startAutoScrollFirstSlider(int itemCount) {
+    _firstSliderTimer?.cancel(); // Cancel any existing timer
+    _firstSliderTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (mounted) {
+        _firstSliderCurrentIndex = (_firstSliderCurrentIndex + 1) % itemCount; // Loop back to 0
+        // Animate to the next item (width: 300 + 12 margin)
+        _firstSliderScrollController.animateTo(
+          _firstSliderCurrentIndex * (300 + 12),
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }*/
+
+  @override
+  void dispose() {
+    // _firstSliderTimer?.cancel();
+    // _firstSliderScrollController.dispose();
+
+    _currentIndex.dispose(); // FirstSlider
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final firstSliderProvider =
+        Provider.of<FirstSliderProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -27,12 +108,42 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.favorite_border,
-              color: TColors.white,
-            ),
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: FaIcon(
+                  FontAwesomeIcons.heart,
+                  color: TColors.white,
+                  size: 30,
+                ),
+              ),
+              Positioned(
+                right: 5,
+                bottom: 5,
+                child: Container(
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: TColors.white, // Badge background color
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: BoxConstraints(
+                    minWidth: 20,
+                    minHeight: 20,
+                  ),
+                  child: Text(
+                    '3', // Replace with dynamic count if needed
+                    style: TextStyle(
+                      color: TColors.primaryColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           ),
           GestureDetector(
             onTap: () {
@@ -58,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            // padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -68,50 +179,136 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search store here...',
-                      suffixIcon: Icon(Icons.search, color: Colors.grey),
+                      suffixIcon: Icon(Icons.search, color: TColors.darkGrey),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey[300]!),
+                        borderSide: BorderSide(color: TColors.darkGrey),
                       ),
                       filled: true,
-                      fillColor: Colors.grey[100],
+                      fillColor: TColors.white,
                     ),
                   ),
                 ),
+
                 // Banners
-                Container(
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    children: [
-                      _buildBanner(
-                          'https://images.unsplash.com/photo-1561069934-eee225952461?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildBanner(
-                          'https://images.unsplash.com/photo-1572584642822-6f8de0243c93?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                    ],
-                  ),
+                /*FutureBuilder<void>(
+                  future: _fetchSlidersFuture, // Use stored future
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: Colors.blue, // Replace with TColors.primaryColor if defined
+                          size: 18,
+                        ),
+                      );
+                    } else if (snapshot.hasError || firstSliderProvider.error != null) {
+                      return Center(child: Text('Error: ${firstSliderProvider.error ?? snapshot.error}'));
+                    } else if (firstSliderProvider.sliders.isEmpty) {
+                      return const Center(child: Text('No sliders available'));
+                    }
+
+                    // Start auto-scrolling once sliders are loaded
+                    if (_firstSliderTimer == null) {
+                      startAutoScrollFirstSlider(firstSliderProvider.sliders.length);
+                    }
+
+                    return Container(
+                      height: 200,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        controller: _firstSliderScrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        itemCount: firstSliderProvider.sliders.length,
+                        itemBuilder: (context, index) {
+                          final slider = firstSliderProvider.sliders[index];
+                          return _buildBanner(slider.image);
+                        },
+                      ),
+                    );
+                  },
+                ),*/
+                // --Top Carousel
+                FutureBuilder<void>(
+                  future: _fetchSlidersFuture, // Use stored future
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: TColors.primaryColor,
+                          // Replace with TColors.primaryColor if defined
+                          size: 18,
+                        ),
+                      );
+                    } else if (snapshot.hasError ||
+                        firstSliderProvider.error != null) {
+                      return Center(
+                          child: Text(
+                              'Error: ${firstSliderProvider.error ?? snapshot.error}'));
+                    } else if (firstSliderProvider.sliders.isEmpty) {
+                      return const Center(child: Text('No sliders available'));
+                    }
+
+                    return Column(
+                      children: [
+                        CarouselSlider(
+                          carouselController: _carouselController,
+                          options: CarouselOptions(
+                            height: 200,
+                            autoPlay: true,
+                            autoPlayInterval: const Duration(seconds: 3),
+                            viewportFraction: 1.0,
+                            onPageChanged: (index, reason) {
+                              // Update the current index for the indicator
+                              _currentIndex.value = index;
+                            },
+                          ),
+                          items: firstSliderProvider.sliders.map((slider) {
+                            return _buildBanner(slider.image);
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 10),
+                        ValueListenableBuilder<int>(
+                          valueListenable: _currentIndex,
+                          builder: (context, currentIndex, child) {
+                            return SmoothPageIndicator(
+                              controller:
+                                  PageController(initialPage: currentIndex),
+                              // Still needed for animation
+                              count: firstSliderProvider.sliders.length,
+                              effect: ExpandingDotsEffect(
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                activeDotColor: TColors.primaryColor,
+                                // Replace with TColors.primaryColor
+                                dotColor: TColors.grey,
+                                spacing: 8,
+                              ),
+                              onDotClicked: (index) {
+                                // Navigate to the clicked page
+                                _carouselController.animateToPage(index);
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
+
                 // Categories
                 CategoryGrid(),
 
                 // Available Coupon Search
                 Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: TColors.grey.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   padding: EdgeInsets.all(12),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Available Coupon",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(Iconsax.ticket_discount5,
-                              color: TColors.primaryColor, size: 28),
-                        ],
-                      ),
+                      const CouponHeader(),
                       SizedBox(height: TSizes.sm),
                       // Coupons
                       Container(
@@ -132,6 +329,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: TSizes.spaceBtwItems),
+                // -- 20% on App type coupon
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  decoration: BoxDecoration(color: Colors.pink),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Get 20% on App",
+                        style: TextStyle(color: TColors.white),
+                      ),
+                      // SizedBox(width: TSizes.sm),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: TColors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text("ramadan20"),
+                      ),
+                      // SizedBox(width: TSizes.sm),
+                      Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: TColors.white,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Image.network(
+                            "https://img.icons8.com/?size=512&id=6PPJuxkGUHti&format=png",
+                            height: 20,
+                          )),
+                    ],
+                  ),
+                ),
+                SizedBox(height: TSizes.spaceBtwItems),
                 // Deals Tabs
                 Container(
                   margin: EdgeInsets.all(10),
@@ -164,40 +398,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: GridView.builder(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // 3 columns
-                            crossAxisSpacing: 8.0, // Spacing between columns
-                            mainAxisSpacing: 8.0, // Spacing between rows
-                            childAspectRatio: 2, // Square cells
+                            crossAxisCount: 3, // 3 columns
+                            crossAxisSpacing: 6.0, // Spacing between columns
+                            mainAxisSpacing: 6.0, // Spacing between rows
+                            childAspectRatio: 1.5, // Square cells
                           ),
-                          itemCount: 6, // 2 rows * 3 columns = 6 items
+                          itemCount: 9, // 2 rows * 3 columns = 6 items
                           itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    style: BorderStyle.solid),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Row(
-                                // mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Image.network(
-                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPcWd9rLxJz2GRqCuNTtye_oSQGJB1C3s8xg&s",
-                                    ),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    '30% OFF',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: TColors.secondaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            return DottedCustomContainer(
+                              imageString:
+                                  "https://www.google.com/url?sa=i&url=https%3A%2F%2Flogotyp.us%2Flogo%2Fbata%2F&psig=AOvVaw0fFHUJCuRup4-KP6zzon-v&ust=1748513889810000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKjo6v33xY0DFQAAAAAdAAAAABAJ",
+                              offerPercentage: "offerPercentage",
                             );
                           },
                         ),
@@ -205,8 +416,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                // Featured Deals
-                Container(
+                SizedBox(height: TSizes.spaceBtwItems),
+
+                //-- 2nd carousel
+                /*Container(
                   height: 200,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -218,7 +431,75 @@ class _HomeScreenState extends State<HomeScreen> {
                           'https://images.unsplash.com/photo-1590228232524-6776f2d6f84b?q=80&w=1178&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
                     ],
                   ),
+                ),*/
+                FutureBuilder<void>(
+                  future: _fetchSlidersFuture, // Use stored future
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: TColors.primaryColor,
+                          // Replace with TColors.primaryColor if defined
+                          size: 18,
+                        ),
+                      );
+                    } else if (snapshot.hasError ||
+                        firstSliderProvider.error != null) {
+                      return Center(
+                          child: Text(
+                              'Error: ${firstSliderProvider.error ?? snapshot.error}'));
+                    } else if (firstSliderProvider.sliders.isEmpty) {
+                      return const Center(child: Text('No sliders available'));
+                    }
+
+                    return Column(
+                      children: [
+                        CarouselSlider(
+                          carouselController: _carouselController,
+                          options: CarouselOptions(
+                            height: 200,
+                            autoPlay: true,
+                            autoPlayInterval: const Duration(seconds: 3),
+                            viewportFraction: 1.0,
+                            onPageChanged: (index, reason) {
+                              // Update the current index for the indicator
+                              _currentIndex.value = index;
+                            },
+                          ),
+                          items: firstSliderProvider.sliders.map((slider) {
+                            return _buildBanner(slider.image);
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 10),
+                        ValueListenableBuilder<int>(
+                          valueListenable: _currentIndex,
+                          builder: (context, currentIndex, child) {
+                            return SmoothPageIndicator(
+                              controller:
+                              PageController(initialPage: currentIndex),
+                              // Still needed for animation
+                              count: firstSliderProvider.sliders.length,
+                              effect: ExpandingDotsEffect(
+                                dotHeight: 8,
+                                dotWidth: 8,
+                                activeDotColor: TColors.primaryColor,
+                                // Replace with TColors.primaryColor
+                                dotColor: TColors.grey,
+                                spacing: 8,
+                              ),
+                              onDotClicked: (index) {
+                                // Navigate to the clicked page
+                                _carouselController.animateToPage(index);
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
+                SizedBox(height: TSizes.spaceBtwItems),
+
                 // Deals of the Day
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -281,6 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 SizedBox(height: TSizes.spaceBtwItems),
+
                 // Additional Banners
                 Container(
                   height: 150,
@@ -397,13 +679,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),*/
                 SizedBox(height: TSizes.spaceBtwItems),
                 Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.pinkAccent.withOpacity(0.1),
+                    color: Color(0XFFffebfd),
                   ),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 6.0, vertical: 16.0),
+                      horizontal: 10.0, vertical: 16.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -418,7 +701,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(width: 16),
                       Flexible(
-                        flex: 2,
+                        flex: 3,
                         child: Column(
                           children: [
                             _buildProductHorizontal(
@@ -508,8 +791,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(width: TSizes.sm),
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              8),
+                          borderRadius: BorderRadius.circular(8),
                           child: Image.network(
                             "https://fabrilife.com/products/6505bbdf8f0c2-square.png",
                             fit: BoxFit.cover,
@@ -619,14 +901,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBanner(String imageUrl) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    // Set banner width to 90% of screen width, accounting for margins
+    final bannerWidth = screenWidth * 0.8;
     return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
       margin: EdgeInsets.only(right: 12.0),
-      width: 300,
+      width: bannerWidth,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Image.network(
           imageUrl,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
         ),
       ),
     );
@@ -668,8 +954,11 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: EdgeInsets.only(right: 10.0),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: TColors.tealAccent.withOpacity(0.1),
+        color: Color(0XFFf3faff),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: TColors.info.withOpacity(0.5),
+        ),
       ),
       width: 200,
       child: Row(
@@ -680,7 +969,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: TColors.white,
+              color: Color(0xFFf4f4f5),
             ),
             child: Image.network(
               imageUrl,
@@ -741,7 +1030,7 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        backgroundColor: isSelected ? TColors.primaryColor : Colors.grey[200],
+        backgroundColor: isSelected ? TColors.primaryColor : TColors.white,
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
     );
@@ -798,13 +1087,14 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: TColors.grey),
+        color: Color(0XFFf8f8f8),
       ),
       width: 180,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             child: Image.network(
               imageUrl,
               fit: BoxFit.cover,
@@ -836,11 +1126,12 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(64),
               color: TColors.primaryColor.withOpacity(0.1),
+              border: Border.all(color: TColors.primaryColor.withOpacity(0.5))
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Iconsax.ticket_discount),
+                Icon(Iconsax.ticket_discount_copy, size: 18),
                 SizedBox(width: 5),
                 Text(
                   'FREEDEL24',
@@ -878,7 +1169,7 @@ class _HomeScreenState extends State<HomeScreen> {
         color: TColors.white,
         borderRadius: BorderRadius.circular(8),
       ),
-      height: 320,
+      // height: 315,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

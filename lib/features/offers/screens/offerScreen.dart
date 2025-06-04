@@ -3,7 +3,7 @@ import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class OfferScreen extends StatelessWidget {
   @override

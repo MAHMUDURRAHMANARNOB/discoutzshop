@@ -12,8 +12,9 @@ dependencies:
     sdk: flutter
 
   # Icons
-  iconsax: ^0.0.8
+  iconsax_flutter: ^1.0.0
   cupertino_icons: ^1.0.8
+  font_awesome_flutter: ^10.8.0
 
 
 
@@ -23,13 +24,15 @@ dependencies:
   logger: ^2.3.0
   url_launcher: ^6.3.1
   flutter_native_splash: ^2.4.0
-  smooth_page_indicator: ^1.1.0
+  smooth_page_indicator: ^1.2.1
   image_picker: ^1.0.5
   image_cropper: ^5.0.1
   flutter_spinkit: ^5.2.0
   shared_preferences: ^2.2.2
   permission_handler: ^11.3.1
   flutter_svg: ^2.1.0
+
+  carousel_slider: ^5.0.0
 
 #  MAP
   flutter_map: ^5.0.0
@@ -40,6 +43,7 @@ dependencies:
   #  get: ^4.6.6
   get_storage: ^2.1.1
   provider: ^6.1.2
+#  flutter_riverpod: ^2.6.1
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +51,16 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
   flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/icons/discount_sho_logo.png"
+  adaptive_icon_foreground: "assets/images/icons/discount_sho_logo.png"
+  adaptive_icon_background: "#ffffff"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 
 flutter:
 
@@ -65,3 +79,4 @@ flutter:
       fonts:
         - asset: assets/fonts/Ubuntu-Regular.ttf
           weight: 400
+
