@@ -457,7 +457,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         CarouselSlider(
                           carouselController: _carouselController,
                           options: CarouselOptions(
-                            height: 200,
+                            height: 100,
                             autoPlay: true,
                             autoPlayInterval: const Duration(seconds: 3),
                             viewportFraction: 1.0,
@@ -476,7 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context, currentIndex, child) {
                             return SmoothPageIndicator(
                               controller:
-                              PageController(initialPage: currentIndex),
+                                  PageController(initialPage: currentIndex),
                               // Still needed for animation
                               count: firstSliderProvider.sliders.length,
                               effect: ExpandingDotsEffect(
@@ -1124,10 +1124,10 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(64),
-              color: TColors.primaryColor.withOpacity(0.1),
-              border: Border.all(color: TColors.primaryColor.withOpacity(0.5))
-            ),
+                borderRadius: BorderRadius.circular(64),
+                color: TColors.primaryColor.withOpacity(0.1),
+                border:
+                    Border.all(color: TColors.primaryColor.withOpacity(0.5))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

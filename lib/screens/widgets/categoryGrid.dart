@@ -14,7 +14,7 @@ class _CategoryGridState extends State<CategoryGrid> {
 
   // Full list of categories
   final List<Map<String, dynamic>> _categories = [
-    {'icon': Icons.toys, 'label': 'Babies & Toys'},
+    {'icon': Icons.toys_outlined, 'label': 'Babies & Toys'},
     {'icon': Icons.chair, 'label': 'Home & Decor'},
     {'icon': Icons.electrical_services, 'label': 'Electrical & Gadget'},
     {'icon': Icons.face_retouching_natural, 'label': 'Beauty & Care'},
@@ -30,7 +30,7 @@ class _CategoryGridState extends State<CategoryGrid> {
   Widget build(BuildContext context) {
     // Show 8 items initially, or all if "See More" is pressed
     final displayedCategories =
-    _showAll ? _categories : _categories.take(8).toList();
+        _showAll ? _categories : _categories.take(8).toList();
 
     return Column(
       children: [
@@ -42,12 +42,13 @@ class _CategoryGridState extends State<CategoryGrid> {
             mainAxisSpacing: 16.0, // Vertical spacing
             childAspectRatio: 0.7, // Width-to-height ratio
             shrinkWrap: true, // Takes only the space needed
-            physics: const NeverScrollableScrollPhysics(), // Disable GridView scrolling
+            physics:
+                const NeverScrollableScrollPhysics(), // Disable GridView scrolling
             children: displayedCategories
                 .map((category) => _buildCategoryItem(
-              category['icon'] as IconData,
-              category['label'] as String,
-            ))
+                      category['icon'] as IconData,
+                      category['label'] as String,
+                    ))
                 .toList(),
           ),
         ),
@@ -55,54 +56,51 @@ class _CategoryGridState extends State<CategoryGrid> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: _showAll
               ? TextButton(
-            onPressed: () {
-              setState(() {
-                _showAll = false; // Collapse back to 8 items
-              });
-            },
-            style: TextButton.styleFrom(
-              backgroundColor: TColors.primaryColor, // Button color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(34.0),
-              ),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0),
-            ),
-            child: const Text(
-              'Collapse',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
-          )
+                  onPressed: () {
+                    setState(() {
+                      _showAll = false; // Collapse back to 8 items
+                    });
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: TColors.primaryColor, // Button color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(34.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  ),
+                  child: const Text(
+                    'Collapse',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                )
               : (_categories.length > 8
-              ? TextButton(
-            onPressed: () {
-              setState(() {
-                _showAll = true; // Show all items
-              });
-            },
-            style: TextButton.styleFrom(
-              backgroundColor: TColors.primaryColor, // Button color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(64.0),
-              ),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0),
-            ),
-            child:  Text(
-              'See More',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-
-              ),
-            ),
-          )
-              : const SizedBox.shrink()), // Hide button if no more items
+                  ? TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _showAll = true; // Show all items
+                        });
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: TColors.primaryColor, // Button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(64.0),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      ),
+                      child: Text(
+                        'See More',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink()), // Hide button if no more items
         ),
       ],
     );
@@ -112,17 +110,19 @@ class _CategoryGridState extends State<CategoryGrid> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[100], // Light background color
-            shape: BoxShape.circle, // Circular shape
-            border: Border.all(color: Colors.grey[300]!, width: 1.0), // Border
-          ),
-          padding: const EdgeInsets.all(12.0), // Padding inside the circle
-          child: Icon(
-            icon,
-            size: 30.0,
-            color: TColors.primaryColor, // Icon color updated to TColors.primaryColor
+        Card(
+          elevation: 2,
+          color: Colors.grey[50],
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(64.0)),
+          child: Container(
+            padding: const EdgeInsets.all(12.0), // Padding inside the circle
+            child: Icon(
+              icon,
+              size: 30.0,
+              color: TColors
+                  .primaryColor, // Icon color updated to TColors.primaryColor
+            ),
           ),
         ),
         const SizedBox(height: 8.0),

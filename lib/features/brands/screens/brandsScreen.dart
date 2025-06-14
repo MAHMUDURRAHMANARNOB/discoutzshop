@@ -113,7 +113,7 @@ class _BrandsScreenState extends State<BrandsScreen> {
                 title,
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   color: TColors.primaryColor,
                 ),
               ),
@@ -138,10 +138,11 @@ class _BrandsScreenState extends State<BrandsScreen> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>  OfferDetailsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => OfferDetailsScreen()),
                   );
                 },
                 child: Container(
