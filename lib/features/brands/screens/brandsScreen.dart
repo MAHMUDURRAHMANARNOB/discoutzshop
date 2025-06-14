@@ -1,8 +1,10 @@
+import 'package:discountzshop/features/offers/screens/offerDetailsMainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../../../utils/constants/colors.dart';
-import '../../offers/screens/offerDetailsMainScreen.dart';
+import '../Providers/BrandsProvider.dart';
+import '../datamodels/BrandsDataModel.dart';
 
 class BrandsScreen extends StatefulWidget {
   const BrandsScreen({super.key});
@@ -14,135 +16,129 @@ class BrandsScreen extends StatefulWidget {
 class _BrandsScreenState extends State<BrandsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Brands"),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(CupertinoIcons.search),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Banner
-            Container(
-              width: double.infinity,
-              child: Image.asset(
-                'assets/images/all_popular_brands.png', // Replace with actual banner URL
-              ),
-            ),
-            // Beauty & Care Section 1
-            _buildSection(
-              title: 'Beauty & Care',
-              items: [
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg', // Replace with actual URLs
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-              ],
-            ),
-            // Fashion & Lifestyle Section
-            _buildSection(
-              title: 'Fashion & Lifestyle',
-              items: [
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-              ],
-            ),
-            // Beauty & Care Section 2
-            _buildSection(
-              title: 'Beauty & Care',
-              items: [
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-              ],
-              showSeeMore: true,
-            ),
-            // Electronics & Gadgets Section
-            _buildSection(
-              title: 'Electronics & Gadgets',
-              items: [
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://news.sharetrip.net/wp-content/uploads/2024/09/cropped-full-logo.png',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Foodpanda_logo_since_2017.jpeg/640px-Foodpanda_logo_since_2017.jpeg',
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Bata.svg/2560px-Bata.svg.png',
-              ],
+    return ChangeNotifierProvider(
+      create: (context) => BrandProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Brands"),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          actions: const [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(CupertinoIcons.search),
             ),
           ],
+        ),
+        body: Consumer<BrandProvider>(
+          builder: (context, provider, child) {
+            return FutureBuilder(
+              future: provider.initialFetch,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    provider.brandsByCategory.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (provider.error != null) {
+                  return Center(child: Text('Error: ${provider.error}'));
+                }
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (ScrollNotification scrollInfo) {
+                    if (!provider.isLoading &&
+                        provider.hasMore &&
+                        scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent) {
+                      provider.loadMore();
+                    }
+                    return false;
+                  },
+                  child: RefreshIndicator(
+                    onRefresh: provider.refresh,
+                    child: ListView(
+                      children: [
+                        // Reintroduced Banner Image
+                        Container(
+                          width: double.infinity,
+                          height: 150,
+                          child: Image.network(
+                            'https://www.discountzshop.com/storage/brands/banner_image/JGmM32QWW41748932077.png',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  color: Colors.grey[300],
+                                  height: 150,
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 100,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                          ),
+                        ),
+                        // Brand Sections
+                        ...provider.brandsByCategory.entries.map((entry) {
+                          return _buildSection(
+                            context: context,
+                            title: entry.key,
+                            brands: entry.value,
+                          );
+                        }).toList(),
+                        if (provider.hasMore && provider.isLoading)
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );
   }
 
   Widget _buildSection({
+    required BuildContext context,
     required String title,
-    required List<String> items,
-    bool showSeeMore = false,
+    required List<Brand> brands,
   }) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: TColors.primaryColor,
-                ),
-              ),
-              if (showSeeMore)
-                Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.grey,
-                ),
-            ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: TColors.primaryColor,
+            ),
           ),
-          SizedBox(height: 8),
-          Divider(color: TColors.primaryColor, thickness: 2),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
+          const Divider(color: TColors.primaryColor, thickness: 2),
+          const SizedBox(height: 8),
           GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
-            itemCount: items.length,
+            itemCount: brands.length,
             itemBuilder: (context, index) {
+              final brand = brands[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => OfferDetailsScreen()),
+                      builder: (context) => OfferDetailsScreen(id: brand.id, initialTab: 2,/*brand: brand*/),
+                    ),
                   );
                 },
                 child: Container(
@@ -159,38 +155,21 @@ class _BrandsScreenState extends State<BrandsScreen> {
                   ),
                   child: Center(
                     child: Image.network(
-                      items[index],
+                      brand.logo ?? '',
                       width: 60,
                       height: 60,
                       fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.broken_image,
+                        color: Colors.grey,
+                        size: 60,
+                      ),
                     ),
                   ),
                 ),
               );
             },
           ),
-          if (showSeeMore) ...[
-            SizedBox(height: 16),
-            Center(
-              child: TextButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(50, 20),
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(60),
-                  // ),
-                  backgroundColor: TColors.primaryColor,
-                ),
-                child: Text(
-                  "See More",
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: TColors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
         ],
       ),
     );

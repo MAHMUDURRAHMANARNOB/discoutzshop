@@ -15,15 +15,15 @@ class _CategoryGridState extends State<CategoryGrid> {
   // Full list of categories
   final List<Map<String, dynamic>> _categories = [
     {'icon': Icons.toys_outlined, 'label': 'Babies & Toys'},
-    {'icon': Icons.chair, 'label': 'Home & Decor'},
+    {'icon': Icons.chair_outlined, 'label': 'Home & Decor'},
     {'icon': Icons.electrical_services, 'label': 'Electrical & Gadget'},
     {'icon': Icons.face_retouching_natural, 'label': 'Beauty & Care'},
-    {'icon': Icons.flight, 'label': 'Travel & Tourism'},
-    {'icon': Icons.sports_baseball, 'label': 'Sports & Outdoors'},
-    {'icon': Icons.subscriptions, 'label': 'Subscriptions'},
-    {'icon': Icons.restaurant, 'label': 'Food & Restaurant'},
-    {'icon': Icons.local_hospital, 'label': 'Health & Wellness'},
-    {'icon': Icons.book, 'label': 'Books & Media'},
+    {'icon': Icons.flight_outlined, 'label': 'Travel & Tourism'},
+    {'icon': Icons.sports_baseball_outlined, 'label': 'Sports & Outdoors'},
+    {'icon': Icons.subscriptions_outlined, 'label': 'Subscriptions'},
+    {'icon': Icons.restaurant_outlined, 'label': 'Food & Restaurant'},
+    {'icon': Icons.local_hospital_outlined, 'label': 'Health & Wellness'},
+    {'icon': Icons.book_outlined, 'label': 'Books & Media'},
   ];
 
   @override

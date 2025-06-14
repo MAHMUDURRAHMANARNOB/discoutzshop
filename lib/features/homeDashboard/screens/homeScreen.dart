@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:discountzshop/features/authentication/login/screens/LoginScreen.dart';
 import 'package:discountzshop/features/homeDashboard/screens/widgets/AvaiableCouponWidget.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../datamodels/HomepageDataModel.dart';
+import '../providers/HomepageDataProvider.dart';
+import '../providers/allCouponProvider.dart';
 import 'widgets/DottedContainer.dart';
 import 'package:discountzshop/screens/widgets/categoryGrid.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
@@ -26,67 +30,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final ScrollController _firstSliderScrollController = ScrollController();
-
   //First slider
   final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
   final CarouselSliderController _carouselController =
       CarouselSliderController();
 
-  // Timer? _firstSliderTimer;
-  // int _firstSliderCurrentIndex = 0;
   Future<void>? _fetchSlidersFuture;
+  late Future<void> _fetchHomepageFuture;
+
 
   @override
   void initState() {
     super.initState();
-    // Start auto-scrolling after the first frame to ensure sliders are loaded
-    /*WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<FirstSliderProvider>(context, listen: false);
-      if (provider.sliders.isNotEmpty) {
-        startAutoScrollFirstSlider(provider.sliders.length);
-      }
-    });*/
     final provider = Provider.of<FirstSliderProvider>(context, listen: false);
+    final homepageProvider = Provider.of<HomepageProvider>(context, listen: false);
+    _fetchHomepageFuture = homepageProvider.fetchHomepageData();
     _fetchSlidersFuture = provider.fetchSliders();
   }
 
-  /*void startAutoScrollFirstSlider(int itemCount) {
-    _firstSliderTimer?.cancel();
-    _firstSliderTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          _firstSliderCurrentIndex = (_firstSliderCurrentIndex + 1) % itemCount; // Loop back to 0
-        });
-        // Animate to the next item (width: 300 + 12 margin)
-        _firstSliderScrollController.animateTo(
-          _firstSliderCurrentIndex * (300 + 12),
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
-  }*/
-  /*void startAutoScrollFirstSlider(int itemCount) {
-    _firstSliderTimer?.cancel(); // Cancel any existing timer
-    _firstSliderTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (mounted) {
-        _firstSliderCurrentIndex = (_firstSliderCurrentIndex + 1) % itemCount; // Loop back to 0
-        // Animate to the next item (width: 300 + 12 margin)
-        _firstSliderScrollController.animateTo(
-          _firstSliderCurrentIndex * (300 + 12),
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
-  }*/
-
   @override
   void dispose() {
-    // _firstSliderTimer?.cancel();
-    // _firstSliderScrollController.dispose();
-
     _currentIndex.dispose(); // FirstSlider
     super.dispose();
   }
@@ -95,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final firstSliderProvider =
         Provider.of<FirstSliderProvider>(context, listen: false);
+    final couponProvider = Provider.of<CouponProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -299,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 CategoryGrid(),
 
                 // Available Coupon Search
-                Container(
+                /*Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     color: TColors.grey.withOpacity(0.2),
@@ -328,7 +292,55 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
+                FutureBuilder<void>(
+              future: couponProvider.fetchCoupons(), // Trigger the fetch
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (couponProvider.errorMessage != null) {
+                  return Center(child: Text(couponProvider.errorMessage!));
+                }
+                if (couponProvider.coupons.isEmpty) {
+                  return Center(child: Text('No coupons available'));
+                }
+
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: TColors.grey.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      const CouponHeader(),
+                      SizedBox(height: TSizes.sm),
+                      Container(
+                        height: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: couponProvider.coupons.length,
+                          itemBuilder: (context, index) {
+                            final coupon = couponProvider.coupons[index];
+                            // print("${coupon.badge} -- ${coupon.couponCode} -- ${coupon.logo}");
+                            return _buildCoupon(
+                              coupon.badge,
+                              coupon.couponCode,
+                              coupon.logo,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
                 SizedBox(height: TSizes.spaceBtwItems),
                 // -- 20% on App type coupon
                 Container(
@@ -366,6 +378,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(height: TSizes.spaceBtwItems),
+
                 // Deals Tabs
                 Container(
                   margin: EdgeInsets.all(10),
@@ -432,7 +445,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),*/
-                FutureBuilder<void>(
+
+                /*FutureBuilder<void>(
                   future: _fetchSlidersFuture, // Use stored future
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -495,6 +509,111 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ],
+                    );
+                  },
+                ),*/
+                FutureBuilder<void>(
+                  future: _fetchHomepageFuture,
+                  builder: (context, snapshot) {
+                    final homepageProvider = Provider.of<HomepageProvider>(context);
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    if (homepageProvider.errorMessage != null) {
+                      return Center(child: Text(homepageProvider.errorMessage!));
+                    }
+                    if (homepageProvider.homepageResponse == null) {
+                      return Center(child: Text('No homepage data available'));
+                    }
+
+                    final homepageData = homepageProvider.homepageResponse!.homepageData;
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Top Banner
+                          /*_buildBanner(
+                            imageUrl: homepageData.topBanner,
+                            link: homepageData.topBannerLink,
+                            height: 150,
+                          ),*/
+                          // SizedBox(height: TSizes.sm ?? 8.0),
+
+                          // Offer Slider (Carousel)
+                          _buildOfferSlider(homepageData),
+                          SizedBox(height: TSizes.sm ?? 8.0),
+
+                          // Deal Section
+                          /*Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  homepageData.dealTitle,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  homepageData.dealHeader,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                _buildBanner(
+                                  imageUrl: homepageData.dealBrandImage,
+                                  height: 100,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: TSizes.sm ?? 8.0),*/
+
+                          // Offer Banner
+                         /* _buildBanner(
+                            imageUrl: homepageData.offerBanner,
+                            link: homepageData.offerBannerLink,
+                            height: 120,
+                          ),*/
+                          SizedBox(height: TSizes.sm ?? 8.0),
+
+                          // Bottom Banner Slider
+                          /*_buildBanner(
+                            imageUrl: homepageData.bottomBannerSliderOne,
+                            link: homepageData.bottomBannerSliderOneLink,
+                            height: 100,
+                          ),
+                          SizedBox(height: TSizes.sm ?? 8.0),
+                          _buildBanner(
+                            imageUrl: homepageData.bottomBannerSliderTwo,
+                            link: homepageData.bottomBannerSliderTwoLink,
+                            height: 100,
+                          ),
+                          SizedBox(height: TSizes.sm ?? 8.0),
+                          _buildBanner(
+                            imageUrl: homepageData.bottomBannerSliderThree,
+                            link: homepageData.bottomBannerSliderThreeLink,
+                            height: 100,
+                          ),
+                          SizedBox(height: TSizes.sm ?? 8.0),
+                          _buildBanner(
+                            imageUrl: homepageData.bottomBannerSliderFour,
+                            link: homepageData.bottomBannerSliderFourLink,
+                            height: 100,
+                          ),*/
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -563,19 +682,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 SizedBox(height: TSizes.spaceBtwItems),
 
-                // Additional Banners
-                Container(
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    children: [
-                      _buildBanner(
-                          'https://plus.unsplash.com/premium_photo-1674815329488-c4fc6bf4ced8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                      _buildBanner(
-                          'https://plus.unsplash.com/premium_photo-1674815329488-c4fc6bf4ced8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                    ],
-                  ),
+                // BOTTOM BAR SLIDER
+                FutureBuilder<void>(
+                  future: _fetchHomepageFuture,
+                  builder: (context, snapshot) {
+                    final homepageProvider = Provider.of<HomepageProvider>(context);
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    if (homepageProvider.errorMessage != null) {
+                      return Center(child: Text(homepageProvider.errorMessage!));
+                    }
+                    if (homepageProvider.homepageResponse == null) {
+                      return Center(child: Text('No homepage data available'));
+                    }
+
+                    final homepageData = homepageProvider.homepageResponse!.homepageData;
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          // Bottom Banner Slider
+                          _buildBottomSlider(homepageData),
+
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 // Product Listings
                 /*Container(
@@ -918,6 +1057,139 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildOfferSlider(HomepageData homepageData) {
+    final sliderItems = [
+      {'image': homepageData.offerSliderImageOne, 'link': homepageData.offerSliderImageOneLink},
+      {'image': homepageData.offerSliderImageTwo, 'link': homepageData.offerSliderImageTwoLink},
+      {'image': homepageData.offerSliderImageThree, 'link': homepageData.offerSliderImageThreeLink},
+      {'image': homepageData.offerSliderImageFour, 'link': homepageData.offerSliderImageFourLink},
+    ];
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 150,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enlargeCenterPage: true,
+          viewportFraction: 0.9,
+          aspectRatio: 2.0,
+        ),
+        items: sliderItems.map((item) {
+          return GestureDetector(
+            onTap: item['link'] != null
+                ? () async {
+              final url = Uri.parse(item['link']!);
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              } else {
+                print('Could not launch ${item['link']}');
+              }
+            }
+                : null,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                   item['image']!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                 /* placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) {
+                    print('Image load error for $url: $error');
+                    return Icon(Icons.error, size: 50, color: Colors.red);
+                  },*/
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildBottomSlider(HomepageData homepageData) {
+    final sliderItems = [
+      {'image': homepageData.bottomBannerSliderOne, 'link': homepageData.bottomBannerSliderOneLink},
+      {'image': homepageData.bottomBannerSliderTwo, 'link': homepageData.bottomBannerSliderTwoLink},
+      {'image': homepageData.bottomBannerSliderThree, 'link': homepageData.bottomBannerSliderThreeLink},
+      {'image': homepageData.bottomBannerSliderFour, 'link': homepageData.bottomBannerSliderFourLink},
+    ];
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 150,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enlargeCenterPage: true,
+          viewportFraction: 0.9,
+          aspectRatio: 2.0,
+        ),
+        items: sliderItems.map((item) {
+          return GestureDetector(
+            onTap: item['link'] != null
+                ? () async {
+              final url = Uri.parse(item['link']!);
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              } else {
+                print('Could not launch ${item['link']}');
+              }
+            }
+                : null,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  item['image']!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  /* placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) {
+                    print('Image load error for $url: $error');
+                    return Icon(Icons.error, size: 50, color: Colors.red);
+                  },*/
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildSliderItem(String imageUrl, String link) {
+    return GestureDetector(
+      onTap: () => launchURL(link),
+      child: Image.network(imageUrl, fit: BoxFit.cover),
+    );
+  }
+
+  void launchURL(String url) async {
+    // Implement URL launching logic here (e.g., using url_launcher package)
+    // For now, this is a placeholder
+    print('Launching URL: $url');
+  }
+
   Widget _buildCategoryItem(IconData icon, String label) {
     return Column(
       children: [
@@ -949,7 +1221,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCoupon(String discount, String code, String imageUrl) {
+  /*Widget _buildCoupon(String discount, String code, String imageUrl) {
     return Container(
       margin: EdgeInsets.only(right: 10.0),
       padding: EdgeInsets.all(5),
@@ -1006,6 +1278,67 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }*/
+  Widget _buildCoupon(String discount, String code, String imageUrl) {
+    return Container(
+      margin: EdgeInsets.only(right: 10.0),
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Color(0XFFf3faff),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: TColors.info.withOpacity(0.5),
+        ),
+      ),
+      width: 200,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Color(0xFFf4f4f5),
+            ),
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              width: 50,
+              height: 50,
+            ),
+          ),
+          SizedBox(width: 10),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                discount,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                decoration: BoxDecoration(
+                  color: TColors.white,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  code,
+                  style: TextStyle(
+                    color: TColors.primaryColor,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ],

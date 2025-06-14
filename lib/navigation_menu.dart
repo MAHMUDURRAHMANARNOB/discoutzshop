@@ -34,44 +34,80 @@ class _NavigationMenuState extends State<NavigationMenu> {
             child: _getSelectedMobileScreen(_selectedMobileIndex),
           ),
         ),
-        bottomNavigationBar: NavigationBar(
-          // height: 80,
+        bottomNavigationBar: BottomAppBar(
+          color: darkMode ? Colors.black : Colors.white,
           elevation: 0,
-          selectedIndex: _selectedMobileIndex,
-          onDestinationSelected: _onItemTapped,
-          backgroundColor: darkMode ? Colors.black : Colors.white,
-          indicatorColor: darkMode
-              ? TColors.white.withOpacity(0.3)
-              : TColors.primaryColor.withOpacity(0.3),
-          destinations: const [
-            NavigationDestination(
-                icon: Icon(
-                  Iconsax.home,
-                ),
-                label: "Home"),
-            NavigationDestination(
-              icon: Icon(Iconsax.discount_circle),
-              label: "Offers",
-            ),NavigationDestination(
-              icon: Icon(Iconsax.location),
-              label: "Maps",
-            ),NavigationDestination(
-              icon: Icon(Iconsax.tag),
-              label: "Brands",
-            ),NavigationDestination(
-              icon: Icon(Iconsax.shop),
-              label: "Stores",
-            ),
-          ],
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(Iconsax.home_copy, "Home", 0),
+              _buildNavItem(Iconsax.discount_circle_copy, "Offers", 1),
+              // _buildNavItem(Iconsax.location_copy, "Maps", 2, isMaps: true),
+              const SizedBox(width: 20),
+              _buildNavItem(Iconsax.tag_copy, "Brands", 3),
+              _buildNavItem(Iconsax.shop_copy, "Stores", 4),
+            ],
+          ),
         ),
+        floatingActionButton: ClipOval(
+          child: Container(
+            padding: EdgeInsets.all(6),
+            color: Colors.white,
+            child: Material(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),
+              color: TColors.primaryColor,
+              child: InkWell(
+                onTap: ()=> _onItemTapped(2),
+                child: SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: Icon(Iconsax.location_copy,size: 28,color: Colors.white,),
+                ),
+              ),
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      ),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index, {bool isMaps = false}) {
+    final darkMode = THelperFunction.isDarkMode(context);
+    final isSelected = _selectedMobileIndex == index;
+
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (isMaps && isSelected)
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: darkMode ? TColors.white.withOpacity(0.3) : TColors.primaryColor.withOpacity(0.3),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: darkMode ? TColors.white : TColors.primaryColor),
+            )
+          else
+            Icon(icon, color: isSelected ? (darkMode ? TColors.white : TColors.primaryColor) : null),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? (darkMode ? TColors.white : TColors.primaryColor) : null,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Future<bool> _onWillPop() async {
     if (_selectedMobileIndex == 0) {
-      // Show confirmation dialog if user is on the first item
       final shouldExit = await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -79,25 +115,24 @@ class _NavigationMenuState extends State<NavigationMenu> {
           content: const Text('Are you sure you want to exit the app?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, false), // Cancel exit
+              onPressed: () => Navigator.pop(context, false),
               child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
                 SystemNavigator.pop();
-              }, // Confirm exit
+              },
               child: const Text('Yes'),
             ),
           ],
         ),
       );
-      return shouldExit ?? false; // Handle null case (e.g., dialog dismissed)
+      return shouldExit ?? false;
     } else {
-      // Navigate to the first item if not on the first item
       setState(() {
         _selectedMobileIndex = 0;
       });
-      return false; // Prevent further navigation handling by Flutter
+      return false;
     }
   }
 
@@ -111,23 +146,17 @@ class _NavigationMenuState extends State<NavigationMenu> {
   }
 
   Widget _getSelectedMobileScreen(int selectedIndex) {
-    Widget screen;
     switch (selectedIndex) {
       case 0:
-        return const HomeScreen(); /*Container(color: Colors.blue)*/
-        break;
+        return const HomeScreen();
       case 1:
-        return  OfferScreen();  /*Container(color: Colors.green) ;*/
-        break;
+        return OfferScreen();
       case 2:
-        return  MapLocationScreen();  /*Container(color: Colors.green) ;*/
-        break;
+        return MapLocationScreen();
       case 3:
-        return  BrandsScreen(); /*Container(color: Colors.orange);*/
-        break;
+        return BrandsScreen();
       case 4:
-        return StoresScreen(); /*Container(color: Colors.purple)*/
-        break;
+        return StoresScreen();
       default:
         return const Text('Select a screen');
     }

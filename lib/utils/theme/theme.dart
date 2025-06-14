@@ -13,6 +13,7 @@ class TAppTheme {
   TAppTheme._();
 
   static ThemeData lightTheme = ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: TColors.primaryColor),
     useMaterial3: true,
     fontFamily: 'Ubuntu',
     brightness: Brightness.light,

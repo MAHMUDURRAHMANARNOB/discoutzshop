@@ -162,7 +162,7 @@ class _StoreCardState extends State<StoreCard> {
       onTap: (){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  OfferDetailsScreen()),
+          MaterialPageRoute(builder: (context) =>  OfferDetailsScreen(id: 1,)),
         );
       },
       child: Card(
