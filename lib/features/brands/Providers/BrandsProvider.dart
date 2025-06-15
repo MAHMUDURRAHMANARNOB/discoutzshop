@@ -5,14 +5,14 @@ import '../datamodels/BrandsDataModel.dart';
 
 class BrandProvider with ChangeNotifier {
   final ApiController _apiController = ApiController();
-  Map<String, List<Brand>> _brandsByCategory = {};
+  Map<String, List<Brands>> _brandsByCategory = {};
   bool _isLoading = false;
   bool _hasMore = true;
   int _currentPage = 1;
   String? _error;
   late Future<void> _initialFetch;
 
-  Map<String, List<Brand>> get brandsByCategory => _brandsByCategory;
+  Map<String, List<Brands>> get brandsByCategory => _brandsByCategory;
   bool get isLoading => _isLoading;
   bool get hasMore => _hasMore;
   String? get error => _error;

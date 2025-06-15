@@ -1,5 +1,5 @@
 /*
-import 'package:discountzshop/features/offers/screens/offerDetailsMainScreen.dart';
+import 'package:discountzshop/features/offers/screens/BrandsDetailsMainScreen.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/cupertino.dart';
@@ -265,7 +265,7 @@ class OfferCard extends StatelessWidget {
 }
 */
 
-import 'package:discountzshop/features/offers/screens/offerDetailsMainScreen.dart';
+import 'package:discountzshop/features/brands/screens/BrandsDetailsMainScreen.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/cupertino.dart';
@@ -388,10 +388,11 @@ class OfferScreen extends StatelessWidget {
                       final offer = provider.offers[index];
                       return GestureDetector(
                         onTap: () {
+                          print("sending slug from offertab - ${offer.slug}");
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => OfferDetailsScreen(id: offer.id, initialTab: 2),
+                              builder: (context) => BrandDetailsScreen(initialTab: 2, slug: offer.slug,),
                             ),
                           );
                         },

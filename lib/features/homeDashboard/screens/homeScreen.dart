@@ -1591,14 +1591,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     brand,
                     style: TextStyle(
                       color: TColors.darkerGrey,
-                      fontSize: 12,
+                      fontSize: 16,
                     ),
                   ),
                   SizedBox(height: 4),
                   Text(
                     name,
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 12,
                       color: TColors.darkGrey,
                       fontWeight: FontWeight.w500,
                     ),

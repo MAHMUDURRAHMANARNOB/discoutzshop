@@ -83,7 +83,7 @@ class _OffersTabState extends State<OffersTab> {
   }
 }
 */
-import 'package:discountzshop/utils/constants/colors.dart';
+/*import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -195,6 +195,93 @@ class _OffersTabState extends State<OffersTab> {
           ],
         ],
       ),
+    );
+  }
+}*/
+
+import 'package:discountzshop/features/brands/Providers/brandDetailsProvider.dart';
+import 'package:discountzshop/utils/constants/colors.dart';
+import 'package:discountzshop/utils/constants/sizes.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class OffersTab extends StatelessWidget {
+  final String slug;
+
+  const OffersTab({super.key, required this.slug});
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<BrandDetailsProvider>();
+    final offers = provider.getOffers(slug);
+
+    print(
+        "OffersTab - slug: $slug, isLoading: ${provider.isLoading}, offers: $offers, error: ${provider.error}");
+
+    if (provider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (provider.error != null) {
+      return Center(child: Text('Error: ${provider.error}'));
+    }
+    if (offers.isEmpty) {
+      return const Center(child: Text('No offers available'));
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: offers.length,
+      itemBuilder: (context, index) {
+        final offer = offers[index];
+        return Card(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  offer.image ?? '',
+                  height: 150,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 150,
+                    color: Colors.grey[100],
+                    child: Center(child: Text('No Image Available')),
+                  ),
+                ),
+                SizedBox(height: TSizes.spaceBtwItems),
+                Text(
+                  offer.price != null && offer.offerPrice!=null
+                      ? '${((offer.price! - offer.offerPrice!) / offer.price! * 100).toStringAsFixed(0)}% DISCOUNT'
+                      : "",
+                  style: const TextStyle(
+                      color: TColors.primaryColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(offer.name ?? 'Unnamed Offer',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(offer.shortDescription ?? 'No description',
+                    style: const TextStyle(color: Colors.grey)),
+                if (offer.badge != null) ...[
+                  SizedBox(height: TSizes.spaceBtwItems / 2),
+                  Text(offer.badge!,
+                      style: const TextStyle(
+                          color: TColors.primaryColor,
+                          fontWeight: FontWeight.bold)),
+                ],
+                if (offer.expiryDate != null) ...[
+                  SizedBox(height: TSizes.spaceBtwItems / 2),
+                  Text('Expires: ${offer.expiryDate}',
+                      style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

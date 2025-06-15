@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../offers/screens/offerDetailsMainScreen.dart';
+import '../../brands/screens/BrandsDetailsMainScreen.dart';
 
 class StoresScreen extends StatefulWidget {
   @override
@@ -162,7 +162,7 @@ class _StoreCardState extends State<StoreCard> {
       onTap: (){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  OfferDetailsScreen(id: 1,)),
+          MaterialPageRoute(builder: (context) =>  BrandDetailsScreen(slug: "",)),
         );
       },
       child: Card(

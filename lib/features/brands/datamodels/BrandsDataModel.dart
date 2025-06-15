@@ -1,4 +1,4 @@
-class Brand {
+class Brands {
   final int id;
   final String? name;
   final String? slug;
@@ -21,7 +21,7 @@ class Brand {
   final List<String> areas;
   final String? addedByName;
 
-  Brand({
+  Brands({
     required this.id,
     this.name,
     this.slug,
@@ -45,8 +45,8 @@ class Brand {
     this.addedByName,
   });
 
-  factory Brand.fromJson(Map<String, dynamic> json) {
-    return Brand(
+  factory Brands.fromJson(Map<String, dynamic> json) {
+    return Brands(
       id: json['id'] ?? 0, // Default to 0 if null, though id should not be null
       name: json['name']?.toString() ?? '',
       slug: json['slug']?.toString() ?? '',

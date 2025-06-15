@@ -1,4 +1,4 @@
-import 'package:discountzshop/features/offers/screens/offerDetailsMainScreen.dart';
+import 'package:discountzshop/features/brands/screens/BrandsDetailsMainScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +103,7 @@ class _BrandsScreenState extends State<BrandsScreen> {
   Widget _buildSection({
     required BuildContext context,
     required String title,
-    required List<Brand> brands,
+    required List<Brands> brands,
   }) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -134,10 +134,11 @@ class _BrandsScreenState extends State<BrandsScreen> {
               final brand = brands[index];
               return GestureDetector(
                 onTap: () {
+                  print("sending slug from brands Screen ${brand.slug}");
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OfferDetailsScreen(id: brand.id, initialTab: 2,/*brand: brand*/),
+                      builder: (context) => BrandDetailsScreen( initialTab: 0, slug: brand.slug!,/*brand: brand*/),
                     ),
                   );
                 },

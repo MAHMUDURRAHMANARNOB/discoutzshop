@@ -1,0 +1,162 @@
+import 'package:discountzshop/utils/constants/colors.dart';
+import 'package:discountzshop/utils/constants/sizes.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../Providers/brandDetailsProvider.dart';
+import 'OffersTab.dart';
+import 'OverviewTab.dart';
+import 'StoreTab.dart';
+
+class BrandDetailsScreen extends StatefulWidget {
+  final String slug;
+  final int initialTab; // 0 for Overview, 1 for Stores, 2 for Offers
+
+  const BrandDetailsScreen(
+      {super.key, required this.slug, this.initialTab = 0});
+
+  @override
+  State<BrandDetailsScreen> createState() => _BrandDetailsScreenState();
+}
+
+class _BrandDetailsScreenState extends State<BrandDetailsScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  late int _initialTab;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: 3, vsync: this, initialIndex: widget.initialTab);
+    _tabController.addListener(_handleTabChange);
+    _initialTab = widget.initialTab;
+    _initializeData();
+  }
+
+  void _initializeData() {
+    final provider = context.read<BrandDetailsProvider>();
+    print("Initializing data for slug: ${widget.slug}");
+    provider.loadBrandData(widget.slug); // Trigger the data load
+  }
+
+  void _handleTabChange() {
+    if (_tabController.index != _initialTab) {
+      setState(() {
+        _initialTab = _tabController.index;
+      });
+      _initializeData();
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => BrandDetailsProvider(),
+      child: Builder(
+        builder: (context) {
+          final provider =
+              Provider.of<BrandDetailsProvider>(context, listen: false);
+          return FutureBuilder<void>(
+            future: provider.loadBrandData(widget.slug),
+            // Use the future from the provider
+            builder: (context, snapshot) {
+              print(
+                  "FutureBuilder state: ${snapshot.connectionState}, error: ${snapshot.error}, data: , isLoading: ${provider.isLoading}, brand: ${provider.getBrand(widget.slug)}");
+              if (snapshot.connectionState == ConnectionState.waiting ||
+                  provider.isLoading) {
+                return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()));
+              }
+              if (snapshot.hasError || provider.error != null) {
+                return Scaffold(
+                    body: Center(
+                        child: Text(
+                            'Error: ${provider.error ?? snapshot.error}')));
+              }
+
+              final brand = provider.getBrand(widget.slug);
+              if (brand == null) {
+                return const Scaffold(
+                    body: Center(child: Text('Brand not found')));
+              }
+
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(_tabController.index == 0
+                      ? 'Overview'
+                      : _tabController.index == 1
+                          ? 'Stores'
+                          : 'Offers'),
+                  centerTitle: true,
+                  actions: [
+                    IconButton(icon: const Icon(Icons.search), onPressed: () {})
+                  ],
+                ),
+                body: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: Image.network(
+                          brand.bannerImage ?? brand.image ?? '',
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(color: Colors.grey[300])),
+                    ),
+                    SizedBox(height: TSizes.spaceBtwItems),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                        color: TColors.grey.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(64.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 5.0),
+                      child: TabBar(
+                        controller: _tabController,
+                        dividerColor: Colors.transparent,
+                        labelColor: Colors.white,
+                        unselectedLabelColor: TColors.black,
+                        indicator: BoxDecoration(
+                          color: TColors.primaryColor,
+                          borderRadius: BorderRadius.circular(64.0),
+                        ),
+                        indicatorPadding: const EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: -20),
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.bold),
+                        unselectedLabelStyle:
+                            const TextStyle(fontWeight: FontWeight.normal),
+                        tabs: const [
+                          Tab(text: 'Overview'),
+                          Tab(text: 'Stores'),
+                          Tab(text: 'Offers'),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          OfferOverviewTab(slug: widget.slug),
+                          OfferStoreTab(slug: widget.slug),
+                          OffersTab(slug: widget.slug),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}

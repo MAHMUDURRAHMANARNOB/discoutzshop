@@ -77,6 +77,7 @@ class _OverviewTabState extends State<OverviewTab> {
   }
 }*/
 
+/*
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -182,6 +183,72 @@ class _OverviewTabState extends State<OverviewTab> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}*/
+
+import 'package:discountzshop/features/brands/Providers/brandDetailsProvider.dart';
+import 'package:discountzshop/utils/constants/sizes.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../brands/Providers/BrandsProvider.dart';
+
+class OfferOverviewTab extends StatelessWidget {
+  final String slug;
+
+  const OfferOverviewTab({super.key, required this.slug});
+
+  @override
+  Widget build(BuildContext context) {
+    print("OFFER OVERVIEW TAB $slug");
+    final provider = context.watch<BrandDetailsProvider>();
+    final brand = provider.getBrand(slug);
+
+    if (provider.isLoading && brand == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (provider.error != null) {
+      return Center(child: Text('Error: ${provider.error}'));
+    }
+    if (brand == null) {
+      return const Center(child: Text('Brand not found'));
+    }
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(brand.name ?? 'Brand Name', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text(brand.about ?? 'No description available.', style: const TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(brand.logo ?? '', width: 150, height: 100, fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[300])),
+                  ),
+                ),
+                const SizedBox(width: TSizes.spaceBtwItems / 2),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(brand.image ?? '', width: 150, height: 100, fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[300])),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text('More About ${brand.name ?? 'Brand'}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text(brand.offerDescription ?? 'No additional details available.', style: const TextStyle(color: Colors.grey)),
+          ],
+        ),
       ),
     );
   }
