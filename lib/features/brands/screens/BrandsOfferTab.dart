@@ -205,10 +205,10 @@ import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OffersTab extends StatelessWidget {
+class BrandsOfferTab extends StatelessWidget {
   final String slug;
 
-  const OffersTab({super.key, required this.slug});
+  const BrandsOfferTab({super.key, required this.slug});
 
   @override
   Widget build(BuildContext context) {

@@ -153,7 +153,7 @@ class OfferCard extends StatelessWidget {
 /*elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-      ),*//*
+      ),*/ /*
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,6 +266,7 @@ class OfferCard extends StatelessWidget {
 */
 
 import 'package:discountzshop/features/brands/screens/BrandsDetailsMainScreen.dart';
+import 'package:discountzshop/features/offers/screens/OfferDetailsScreen.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:flutter/cupertino.dart';
@@ -295,17 +296,20 @@ class OfferScreen extends StatelessWidget {
               TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: TColors.primaryColor.withOpacity(0.1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {},
                 child: Row(
                   children: [
                     Text(
                       "All Offers",
-                      style: TextStyle(color: TColors.primaryColor),
+                      style: TextStyle(color: TColors.darkerGrey),
                     ),
                     SizedBox(width: TSizes.sm / 2),
                     Icon(
                       Icons.arrow_drop_down_circle_outlined,
+                      size: 18,
                       color: TColors.primaryColor,
                     ),
                   ],
@@ -314,7 +318,9 @@ class OfferScreen extends StatelessWidget {
               SizedBox(width: 8),
               TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: TColors.white.withOpacity(0.1),
+                  // backgroundColor: TColors.white.withOpacity(0.1),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                   side: BorderSide(
                     color: TColors.grey,
                   ),
@@ -324,11 +330,12 @@ class OfferScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Filter",
-                      style: TextStyle(color: TColors.primaryColor),
+                      style: TextStyle(color: TColors.black),
                     ),
                     SizedBox(width: TSizes.sm / 2),
                     Icon(
-                      Iconsax.filter,
+                      Iconsax.filter_copy,
+                      size: 18,
                       color: TColors.primaryColor,
                     ),
                   ],
@@ -337,10 +344,16 @@ class OfferScreen extends StatelessWidget {
               SizedBox(width: TSizes.sm),
               Expanded(
                 child: TextField(
+
                   decoration: InputDecoration(
+                    suffixIcon: Icon(
+                      CupertinoIcons.search,
+                      color: TColors.darkGrey,
+                    ),
                     hintText: "Search here...",
+                    hintStyle: TextStyle(color: TColors.darkGrey),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(0),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
@@ -354,7 +367,10 @@ class OfferScreen extends StatelessWidget {
         body: Consumer<OfferProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading && provider.offers.isEmpty) {
-              return Center(child: CircularProgressIndicator(color: TColors.primaryColor,));
+              return Center(
+                  child: CircularProgressIndicator(
+                color: TColors.primaryColor,
+              ));
             }
             if (provider.error != null) {
               return Center(child: Text('Error: ${provider.error}'));
@@ -380,10 +396,14 @@ class OfferScreen extends StatelessWidget {
                       mainAxisSpacing: 8,
                       childAspectRatio: childAspectRatio,
                     ),
-                    itemCount: provider.offers.length + (provider.hasMore ? 1 : 0),
+                    itemCount:
+                        provider.offers.length + (provider.hasMore ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == provider.offers.length) {
-                        return Center(child: CircularProgressIndicator(color: TColors.primaryColor,));
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: TColors.primaryColor,
+                        ));
                       }
                       final offer = provider.offers[index];
                       return GestureDetector(
@@ -392,7 +412,9 @@ class OfferScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BrandDetailsScreen(initialTab: 2, slug: offer.slug,),
+                              builder: (context) => OfferDetailsScreen(
+                                slug: offer.slug,
+                              ),
                             ),
                           );
                         },
@@ -432,6 +454,7 @@ class OfferScreen extends StatelessWidget {
     return "${days}d: ${hours}h: ${minutes}m";
   }
 }
+
 class OfferCard extends StatelessWidget {
   final String imageUrl;
   final String brand;
@@ -452,12 +475,10 @@ class OfferCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-    color: TColors.primaryColor.withOpacity(0.05),
-    ),
-
-
+        color: TColors.primaryColor.withOpacity(0.05),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

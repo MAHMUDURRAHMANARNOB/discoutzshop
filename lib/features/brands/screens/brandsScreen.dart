@@ -59,10 +59,10 @@ class _BrandsScreenState extends State<BrandsScreen> {
                         // Reintroduced Banner Image
                         Container(
                           width: double.infinity,
-                          height: 150,
+                          // height: 150,
                           child: Image.network(
-                            'https://www.discountzshop.com/storage/brands/banner_image/JGmM32QWW41748932077.png',
-                            fit: BoxFit.cover,
+                            'https://discountzshop.com/storage/pagebanner/image/pZqnWzipzm1726390129.jpg',
+                            fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
                                   color: Colors.grey[300],

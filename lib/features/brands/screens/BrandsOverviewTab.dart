@@ -194,10 +194,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../brands/Providers/BrandsProvider.dart';
 
-class OfferOverviewTab extends StatelessWidget {
+class BrandsOverviewTab extends StatelessWidget {
   final String slug;
 
-  const OfferOverviewTab({super.key, required this.slug});
+  const BrandsOverviewTab({super.key, required this.slug});
 
   @override
   Widget build(BuildContext context) {

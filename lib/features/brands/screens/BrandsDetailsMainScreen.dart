@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Providers/brandDetailsProvider.dart';
-import 'OffersTab.dart';
-import 'OverviewTab.dart';
-import 'StoreTab.dart';
+import 'BrandsOfferTab.dart';
+import 'BrandsOverviewTab.dart';
+import 'BrandsOfferStoreTab.dart';
 
 class BrandDetailsScreen extends StatefulWidget {
   final String slug;
@@ -144,9 +144,9 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen>
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          OfferOverviewTab(slug: widget.slug),
-                          OfferStoreTab(slug: widget.slug),
-                          OffersTab(slug: widget.slug),
+                          BrandsOverviewTab(slug: widget.slug),
+                          BrandsOfferStoreTab(slug: widget.slug),
+                          BrandsOfferTab(slug: widget.slug),
                         ],
                       ),
                     ),

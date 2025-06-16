@@ -7,6 +7,7 @@ import '../features/brands/datamodels/storeDataModel.dart';
 import '../features/homeDashboard/datamodels/CouponResponseDataModel.dart';
 import '../features/homeDashboard/datamodels/HomepageDataModel.dart';
 import '../features/homeDashboard/datamodels/firstSliderDataModel.dart';
+import '../features/offers/datamodels/OfferDetailsDataModel.dart';
 import '../features/offers/datamodels/offersDataModel.dart';
 
 class ApiController {
@@ -167,6 +168,22 @@ class ApiController {
     } else {
       print('OFFER -- Failed with status: ${response.statusCode}');
       throw Exception('Failed to load offers: ${response.statusCode}');
+    }
+  }
+
+  Future<OfferDetails?> fetchOfferDetails(String slug) async {
+    final url = '$_baseUrl/api/offer-details/$slug';
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        print("RESPONSE -- ${jsonDecode(response.body)}");
+        return OfferDetails.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to load offer details');
+      }
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }
