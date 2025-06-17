@@ -102,12 +102,47 @@ class _BrandDetailsScreenState extends State<BrandDetailsScreen>
                 ),
                 body: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      child: Image.network(
-                          brand.bannerImage ?? brand.image ?? '',
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(color: Colors.grey[300])),
+                    SizedBox(
+                      height: 190, // Adjust based on how much you want the logo to overlap
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          // Banner Image
+                          Container(
+                            width: double.infinity,
+                            height: 150,
+                            child: Image.network(
+                              brand.bannerImage ?? '',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(color: Colors.grey[300]),
+                            ),
+                          ),
+
+                          // Logo Positioned
+                          Positioned(
+                            top: 110, // Adjust this to control overlap
+                            left: 16,
+                            child: Visibility(
+                              visible: brand.logo != null,
+                              child: Card(
+                                elevation: 6,
+                                color: TColors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.network(
+                                    brand.logo!,
+                                    width: 60,
+                                    height: 60, // Adjust size if needed
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (context, error, stackTrace) => Container(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: TSizes.spaceBtwItems),
                     Container(

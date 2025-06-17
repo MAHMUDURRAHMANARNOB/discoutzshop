@@ -1,4 +1,7 @@
+import 'package:discountzshop/features/stores/datamodels/storeListDataModel.dart';
+import 'package:discountzshop/features/stores/providers/storeListProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../brands/screens/BrandsDetailsMainScreen.dart';
 
@@ -8,165 +11,174 @@ class StoresScreen extends StatefulWidget {
 }
 
 class _StoresScreenState extends State<StoresScreen> {
-  final List<Map<String, String>> stores = [
-    {
-      'name': 'Vision Emporium',
-      'location': 'Mirpur',
-      'logo': 'https://vision.com.bd/images/logos/16/V.-logo-200x80.png'
-    },
-    {
-      'name': 'Vision Emporium',
-      'location': 'Rampura',
-      'logo': 'https://vision.com.bd/images/logos/16/V.-logo-200x80.png'
-    },
-    {
-      'name': 'Vision Emporium',
-      'location': 'Krishi Market',
-      'logo': 'https://vision.com.bd/images/logos/16/V.-logo-200x80.png'
-    },
-    {
-      'name': 'Walton Plaza',
-      'location': 'Rampura',
-      'logo':
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/2560px-Walton_Group.svg.png'
-    },
-    {
-      'name': 'Walton Plaza',
-      'location': 'Dhanmondi 27',
-      'logo':
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/2560px-Walton_Group.svg.png'
-    },
-    {
-      'name': 'Walton Plaza',
-      'location': 'Mirpur 1',
-      'logo':
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/2560px-Walton_Group.svg.png'
-    },
-    {
-      'name': 'Walton Plaza',
-      'location': 'Mirpur 11',
-      'logo':
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/2560px-Walton_Group.svg.png'
-    },
-    {
-      'name': 'Walton Plaza',
-      'location': 'Uttara',
-      'logo':
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/2560px-Walton_Group.svg.png'
-    },
-    {
-      'name': 'Walton Plaza',
-      'location': 'Mirpur 2',
-      'logo':
-          'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Walton_Group.svg/2560px-Walton_Group.svg.png'
-    },
-    {
-      'name': 'Apex Plaza',
-      'location': 'Mirpur 1',
-      'logo':
-          'https://mir-s3-cdn-cf.behance.net/projects/404/38db8c139830717.Y3JvcCwxMDgwLDg0NCwwLDExNw.jpg'
-    },
-  ];
+  final ScrollController _scrollController = ScrollController();
+  late StoreListProvider _provider;
+
+  @override
+  void initState() {
+    super.initState();
+    _provider = StoreListProvider();
+    // Fetch initial data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _provider.fetchStores();
+    });
+
+    // Handle pagination on scroll
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200 &&
+          !_provider.isLoading &&
+          _provider.hasMore) {
+        _provider.fetchStores();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final iconHeight =
-        screenWidth * 0.2;
-    
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final iconHeight = screenWidth * 0.2;
+
+    return ChangeNotifierProvider.value(
+      value: _provider,
+      child: Builder(
+        builder: (context) {
+          final provider = Provider.of<StoreListProvider>(context);
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: Column(
                 children: [
-                  Text(
-                    'ALL STORES',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'ALL STORES',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            OutlinedButton.icon(
+                              onPressed: () {},
+                              icon: Icon(Icons.filter_list, size: 16),
+                              label: Text('Filter'),
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(color: Colors.orange),
+                                foregroundColor: Colors.orange,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(Icons.search, color: Colors.grey),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  Row(
-                    children: [
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.filter_list, size: 16),
-                        label: Text('Filter'),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Colors.orange),
-                          foregroundColor: Colors.orange,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(Icons.search, color: Colors.grey),
-                    ],
+                  // Grid of Stores
+                  Expanded(
+                    child: AnimatedBuilder(
+                      animation: provider,
+                      builder: (context, child) {
+                        if (provider.isLoading && provider.stores.isEmpty) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+
+                        if (provider.stores.isEmpty && !provider.isLoading) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.error_outline, color: Colors.red, size: 48),
+                                SizedBox(height: 16),
+                                Text(
+                                  'Failed to load stores or no stores found.',
+                                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    provider.reset();
+                                    provider.fetchStores();
+                                  },
+                                  child: Text('Retry'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        return GridView.builder(
+                          controller: _scrollController,
+                          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                          itemCount: provider.stores.length + (provider.isLoading ? 1 : 0),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.8,
+                          ),
+                          itemBuilder: (context, index) {
+                            if (index >= provider.stores.length) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                child: Center(child: CircularProgressIndicator()),
+                              );
+                            }
+                            final store = provider.stores[index];
+                            return StoreCard(
+                              store: store,
+                              imageHeight: iconHeight,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
             ),
-            // Grid of Stores
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.8,
-                ),
-                itemCount: stores.length,
-                itemBuilder: (context, index) {
-                  return StoreCard(
-                    name: stores[index]['name']!,
-                    location: stores[index]['location']!,
-                    logo: stores[index]['logo']!, imageHeight: iconHeight,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class StoreCard extends StatefulWidget {
-  final String name;
-  final String location;
-  final String logo;
-
+class StoreCard extends StatelessWidget {
+  final StoreListDataModel store;
   final double imageHeight;
 
   const StoreCard({
-    required this.name,
-    required this.location,
-    required this.logo, required this.imageHeight,
+    required this.store,
+    required this.imageHeight,
   });
 
   @override
-  State<StoreCard> createState() => _StoreCardState();
-}
-
-class _StoreCardState extends State<StoreCard> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  BrandDetailsScreen(slug: "",)),
+          MaterialPageRoute(
+            builder: (context) => BrandDetailsScreen(slug: store.brandSlug ?? ''),
+          ),
         );
       },
       child: Card(
-        color: Color(0xFFFFF5F0), // Light peach background
+        color: Color(0xFFFFF5F0),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -185,33 +197,23 @@ class _StoreCardState extends State<StoreCard> {
                 ),
               ),
               SizedBox(height: 8),
-              // Logo Placeholder (since we don't have actual logos)
-              /*Container(
-                height: 40,
-                child: Text(
-                  logo.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: logo == 'apex' ? Colors.red : Colors.black,
-                  ),
-                ),
-              ),*/
               Expanded(
                 child: Image.network(
-                  widget.logo, width: double.infinity,
-                  // height: imageHeight,
-                  // Slightly increased height for better visuals
+                  store.logo ?? '',
+                  width: double.infinity,
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
                 ),
               ),
               SizedBox(height: 16),
               Text(
-                widget.name,
+                store.title ?? '',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               SizedBox(height: 8),
               Row(
@@ -222,11 +224,15 @@ class _StoreCardState extends State<StoreCard> {
                     size: 16,
                   ),
                   SizedBox(width: 4),
-                  Text(
-                    widget.location,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                  Expanded(
+                    child: Text(
+                      store.area ?? '',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

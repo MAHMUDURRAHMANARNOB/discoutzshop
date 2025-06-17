@@ -88,17 +88,17 @@ class _OfferDetailsScreenState extends State<OfferDetailsScreen> {
                 ),*/
                 // Top Banner with Logo Overlap
                 SizedBox(
-                  height: 130, // Adjust based on how much you want the logo to overlap
+                  height: 190, // Adjust based on how much you want the logo to overlap
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
                       // Banner Image
                       Container(
                         width: double.infinity,
-                        height: 100,
+                        height: 150,
                         child: Image.network(
                           data.brand.banner_image ?? '',
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(color: Colors.grey[300]),
                         ),
@@ -106,18 +106,22 @@ class _OfferDetailsScreenState extends State<OfferDetailsScreen> {
 
                       // Logo Positioned
                       Positioned(
-                        top: 70, // Adjust this to control overlap
+                        top: 110, // Adjust this to control overlap
                         left: 16,
                         child: Visibility(
                           visible: data.brand.logo != null,
                           child: Card(
                             elevation: 6,
-                            child: Image.network(
-                              data.brand.logo!,
-                              width: 60,
-                              height: 60, // Adjust size if needed
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) => Container(),
+                            color: TColors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                data.brand.logo!,
+                                width: 60,
+                                height: 60, // Adjust size if needed
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) => Container(),
+                              ),
                             ),
                           ),
                         ),
@@ -165,39 +169,7 @@ class _OfferDetailsScreenState extends State<OfferDetailsScreen> {
                         child: Column(
                           children: [
                             // Middle Banners
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        data.brand.middle_banner_left ?? '',
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) =>
-                                            Container(color: Colors.grey[300]),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: TSizes.spaceBtwItems),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        data.brand.middle_banner_right ?? '',
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) =>
-                                            Container(color: Colors.grey[300]),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
@@ -213,6 +185,40 @@ class _OfferDetailsScreenState extends State<OfferDetailsScreen> {
                                     data.brand.about,
                                   ),
                                   SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Image.network(
+                                              data.brand.middle_banner_left ?? '',
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) =>
+                                                  Container(color: Colors.grey[300]),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: TSizes.spaceBtwItems),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Image.network(
+                                              data.brand.middle_banner_right ?? '',
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) =>
+                                                  Container(color: Colors.grey[300]),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
                                   Text(
                                     'More About ${data.brand.name}',
                                     style: TextStyle(
@@ -222,6 +228,7 @@ class _OfferDetailsScreenState extends State<OfferDetailsScreen> {
                                   Text(
                                     data.brand.offerDescription,
                                   ),
+
                                 ],
                               ),
                             ),
@@ -229,7 +236,7 @@ class _OfferDetailsScreenState extends State<OfferDetailsScreen> {
                         ),
                       ),
                       // Stores Tab (Placeholder)
-                      Center(child: Text('Stores content will be added here')),
+                      Center(child: Text('Stores not available yet')),
                       // Offers Tab
                       SingleChildScrollView(
                         child: Padding(

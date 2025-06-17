@@ -13,6 +13,7 @@ import 'features/homeDashboard/providers/HomepageDataProvider.dart';
 import 'features/homeDashboard/providers/allCouponProvider.dart';
 import 'features/offers/providers/OfferDetailsProvider.dart';
 import 'features/offers/providers/offerProvider.dart';
+import 'features/stores/providers/storeListProvider.dart';
 
 void main() {
   runApp(const DiscountZShop());
@@ -32,6 +33,7 @@ class DiscountZShop extends StatelessWidget {
         ChangeNotifierProvider<OfferProvider>(create: (_) => OfferProvider()),
         ChangeNotifierProvider<BrandDetailsProvider>(create: (_) => BrandDetailsProvider()),
         ChangeNotifierProvider<OfferDetailsProvider>(create: (_) => OfferDetailsProvider()),
+        ChangeNotifierProvider<StoreListProvider>(create: (_) => StoreListProvider()),
         // Add more providers here if needed
       ],
       child: MaterialApp(

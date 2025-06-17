@@ -9,6 +9,7 @@ import '../features/homeDashboard/datamodels/HomepageDataModel.dart';
 import '../features/homeDashboard/datamodels/firstSliderDataModel.dart';
 import '../features/offers/datamodels/OfferDetailsDataModel.dart';
 import '../features/offers/datamodels/offersDataModel.dart';
+import '../features/stores/datamodels/storeListDataModel.dart';
 
 class ApiController {
   static const String _baseUrl = 'https://www.discountzshop.com/api';
@@ -87,6 +88,22 @@ class ApiController {
       }
     } catch (e) {
       throw Exception('Error fetching offers: $e');
+    }
+  }
+
+  Future<OfferDetails?> fetchOfferDetails(String slug) async {
+    final url = '$_baseUrl/api/offer-details/$slug';
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        print("RESPONSE -- ${jsonDecode(response.body)}");
+        return OfferDetails.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to load offer details');
+      }
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 
@@ -171,19 +188,23 @@ class ApiController {
     }
   }
 
-  Future<OfferDetails?> fetchOfferDetails(String slug) async {
-    final url = '$_baseUrl/api/offer-details/$slug';
+
+  static Future<List<StoreListDataModel>> fetchStores(int page) async {
+    final url = Uri.parse('$_baseUrl/api/stores?paginate=10&page=$page');
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(url);
       if (response.statusCode == 200) {
-        print("RESPONSE -- ${jsonDecode(response.body)}");
-        return OfferDetails.fromJson(jsonDecode(response.body));
-      } else {
-        throw Exception('Failed to load offer details');
+        print("All Stores page: $page -- \nResponse - ${json.decode(response.body)} ");
+        final jsonData = json.decode(response.body);
+        if (jsonData['status'] == 'success') {
+          final List storesJson = jsonData['data']['stores'];
+          return storesJson.map((store) => StoreListDataModel.fromJson(store)).toList();
+        }
       }
+      return [];
     } catch (e) {
-      print(e);
-      return null;
+      print('Error fetching stores: $e');
+      return [];
     }
   }
 }

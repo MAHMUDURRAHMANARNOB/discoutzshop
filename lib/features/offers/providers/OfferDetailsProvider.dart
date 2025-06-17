@@ -22,7 +22,7 @@ class OfferDetailsProvider with ChangeNotifier {
       final data = await _apiController.fetchOfferDetails(slug);
       if (data != null) {
         _offerDetails = data;
-        // print("PROVIDER PRINT- $data");
+        print("PROVIDER PRINT- $data");
       }
     } finally {
       _isLoading = false;
