@@ -173,7 +173,7 @@ class StoreCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => BrandDetailsScreen(slug: store.brandSlug ?? ''),
+            builder: (context) => BrandDetailsScreen(slug: store.brandSlug ?? '',initialTab: 1,),
           ),
         );
       },

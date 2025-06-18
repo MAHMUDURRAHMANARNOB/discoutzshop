@@ -6,6 +6,8 @@ import '../features/brands/datamodels/offerDataModel.dart';
 import '../features/brands/datamodels/storeDataModel.dart';
 import '../features/homeDashboard/datamodels/CouponResponseDataModel.dart';
 import '../features/homeDashboard/datamodels/HomepageDataModel.dart';
+import '../features/homeDashboard/datamodels/categoriesDataModel.dart';
+import '../features/homeDashboard/datamodels/categoryDetailsDataModel.dart';
 import '../features/homeDashboard/datamodels/firstSliderDataModel.dart';
 import '../features/offers/datamodels/OfferDetailsDataModel.dart';
 import '../features/offers/datamodels/offersDataModel.dart';
@@ -205,6 +207,42 @@ class ApiController {
     } catch (e) {
       print('Error fetching stores: $e');
       return [];
+    }
+  }
+
+  Future<List<CategoriesDataModel>> fetchCategories() async {
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/categories'));
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        if (jsonData['status'] == 'success') {
+          final categoriesJson = jsonData['data']['categories'] as List;
+          return categoriesJson.map((json) => CategoriesDataModel.fromJson(json)).toList();
+        } else {
+          throw Exception('API returned unsuccessful status');
+        }
+      } else {
+        throw Exception('Failed to load categories: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching categories: $e');
+    }
+  }
+
+  Future<CategoryDetailsDataModel> getCategoryDetails(String slug) async {
+    final response = await http.get(Uri.parse('$_baseUrl/category/$slug'));
+
+    print('$_baseUrl/category/$slug');
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      if (jsonData['status'] == 'success') {
+        return CategoryDetailsDataModel.fromJson(jsonData['data']);
+      } else {
+        throw Exception('API returned unsuccessful status');
+      }
+    } else {
+      throw Exception('Failed to load category details');
     }
   }
 }

@@ -8,7 +8,7 @@ import '../datamodels/HomepageDataModel.dart';
 import '../providers/HomepageDataProvider.dart';
 import '../providers/allCouponProvider.dart';
 import 'widgets/DottedContainer.dart';
-import 'package:discountzshop/screens/widgets/categoryGrid.dart';
+import 'package:discountzshop/features/homeDashboard/screens/widgets/categoryGrid.dart';
 import 'package:discountzshop/utils/constants/colors.dart';
 import 'package:discountzshop/utils/constants/sizes.dart';
 import 'package:discountzshop/utils/helpers/helper_function.dart';
