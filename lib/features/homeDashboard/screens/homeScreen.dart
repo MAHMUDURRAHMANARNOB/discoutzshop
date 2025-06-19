@@ -37,13 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void>? _fetchSlidersFuture;
   late Future<void> _fetchHomepageFuture;
-
-
+  late final homepageProvider;
   @override
   void initState() {
     super.initState();
     final provider = Provider.of<FirstSliderProvider>(context, listen: false);
-    final homepageProvider = Provider.of<HomepageProvider>(context, listen: false);
+     homepageProvider =
+        Provider.of<HomepageProvider>(context, listen: false);
     _fetchHomepageFuture = homepageProvider.fetchHomepageData();
     _fetchSlidersFuture = provider.fetchSliders();
   }
@@ -263,125 +263,97 @@ class _HomeScreenState extends State<HomeScreen> {
                 CategoryGrid(),
 
                 // Available Coupon Search
-                /*Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: TColors.grey.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    children: [
-                      const CouponHeader(),
-                      SizedBox(height: TSizes.sm),
-                      // Coupons
-                      Container(
-                        height: 100,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          // padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          children: [
-                            _buildCoupon('25% OFF', 'promo360',
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Grameenphone_Logo_GP_Logo.svg/1200px-Grameenphone_Logo_GP_Logo.svg.png'),
-                            _buildCoupon('25% OFF', 'promo360',
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Grameenphone_Logo_GP_Logo.svg/1200px-Grameenphone_Logo_GP_Logo.svg.png'),
-                            _buildCoupon('25% OFF', 'promo360',
-                                'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Grameenphone_Logo_GP_Logo.svg/1200px-Grameenphone_Logo_GP_Logo.svg.png'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),*/
                 FutureBuilder<void>(
-              future: couponProvider.fetchCoupons(), // Trigger the fetch
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-                if (couponProvider.errorMessage != null) {
-                  return Center(child: Text(couponProvider.errorMessage!));
-                }
-                if (couponProvider.coupons.isEmpty) {
-                  return Center(child: Text('No coupons available'));
-                }
+                  future: couponProvider.fetchCoupons(), // Trigger the fetch
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    if (couponProvider.errorMessage != null) {
+                      return Center(child: Text(couponProvider.errorMessage!));
+                    }
+                    if (couponProvider.coupons.isEmpty) {
+                      return Center(child: Text('No coupons available'));
+                    }
 
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: TColors.grey.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    children: [
-                      const CouponHeader(),
-                      SizedBox(height: TSizes.sm),
-                      Container(
-                        height: 100,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: couponProvider.coupons.length,
-                          itemBuilder: (context, index) {
-                            final coupon = couponProvider.coupons[index];
-                            // print("${coupon.badge} -- ${coupon.couponCode} -- ${coupon.logo}");
-                            return _buildCoupon(
-                              coupon.badge,
-                              coupon.couponCode,
-                              coupon.logo,
-                            );
-                          },
-                        ),
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: TColors.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
-                SizedBox(height: TSizes.spaceBtwItems),
-                // -- 20% on App type coupon
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(color: Colors.pink),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "Get 20% on App",
-                        style: TextStyle(color: TColors.white),
-                      ),
-                      // SizedBox(width: TSizes.sm),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: TColors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text("ramadan20"),
-                      ),
-                      // SizedBox(width: TSizes.sm),
-                      Container(
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: TColors.white,
-                            borderRadius: BorderRadius.circular(6),
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          const CouponHeader(),
+                          SizedBox(height: TSizes.sm),
+                          Container(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: couponProvider.coupons.length,
+                              itemBuilder: (context, index) {
+                                final coupon = couponProvider.coupons[index];
+                                // print("${coupon.badge} -- ${coupon.couponCode} -- ${coupon.logo}");
+                                return _buildCoupon(
+                                  coupon.badge,
+                                  coupon.couponCode,
+                                  coupon.logo,
+                                );
+                              },
+                            ),
                           ),
-                          child: Image.network(
-                            "https://img.icons8.com/?size=512&id=6PPJuxkGUHti&format=png",
-                            height: 20,
-                          )),
-                    ],
-                  ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: TSizes.spaceBtwItems),
+
+                //Offer Banner
+                FutureBuilder<void>(
+                  future: _fetchHomepageFuture,
+                  builder: (context, snapshot) {
+                    final homepageProvider =
+                    Provider.of<HomepageProvider>(context);
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    if (homepageProvider.errorMessage != null) {
+                      return Center(
+                          child: Text(homepageProvider.errorMessage!));
+                    }
+                    if (homepageProvider.homepageResponse == null) {
+                      return Center(child: Text('No homepage data available'));
+                    }
+
+                    final homepageData =
+                        homepageProvider.homepageResponse!.homepageData;
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network(homepageData.offerBanner),
+                          SizedBox(height: TSizes.sm ?? 8.0),
+
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: TSizes.spaceBtwItems),
 
                 // Deals Tabs
                 Container(
-                  margin: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -515,7 +487,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 FutureBuilder<void>(
                   future: _fetchHomepageFuture,
                   builder: (context, snapshot) {
-                    final homepageProvider = Provider.of<HomepageProvider>(context);
+                    final homepageProvider =
+                        Provider.of<HomepageProvider>(context);
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -524,13 +497,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     }
                     if (homepageProvider.errorMessage != null) {
-                      return Center(child: Text(homepageProvider.errorMessage!));
+                      return Center(
+                          child: Text(homepageProvider.errorMessage!));
                     }
                     if (homepageProvider.homepageResponse == null) {
                       return Center(child: Text('No homepage data available'));
                     }
 
-                    final homepageData = homepageProvider.homepageResponse!.homepageData;
+                    final homepageData =
+                        homepageProvider.homepageResponse!.homepageData;
 
                     return SingleChildScrollView(
                       child: Column(
@@ -581,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(height: TSizes.sm ?? 8.0),*/
 
                           // Offer Banner
-                         /* _buildBanner(
+                          /* _buildBanner(
                             imageUrl: homepageData.offerBanner,
                             link: homepageData.offerBannerLink,
                             height: 120,
@@ -686,7 +661,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 FutureBuilder<void>(
                   future: _fetchHomepageFuture,
                   builder: (context, snapshot) {
-                    final homepageProvider = Provider.of<HomepageProvider>(context);
+                    final homepageProvider =
+                        Provider.of<HomepageProvider>(context);
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -695,22 +671,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     }
                     if (homepageProvider.errorMessage != null) {
-                      return Center(child: Text(homepageProvider.errorMessage!));
+                      return Center(
+                          child: Text(homepageProvider.errorMessage!));
                     }
                     if (homepageProvider.homepageResponse == null) {
                       return Center(child: Text('No homepage data available'));
                     }
 
-                    final homepageData = homepageProvider.homepageResponse!.homepageData;
+                    final homepageData =
+                        homepageProvider.homepageResponse!.homepageData;
 
                     return SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           // Bottom Banner Slider
                           _buildBottomSlider(homepageData),
-
                         ],
                       ),
                     );
@@ -1059,10 +1035,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildOfferSlider(HomepageData homepageData) {
     final sliderItems = [
-      {'image': homepageData.offerSliderImageOne, 'link': homepageData.offerSliderImageOneLink},
-      {'image': homepageData.offerSliderImageTwo, 'link': homepageData.offerSliderImageTwoLink},
-      {'image': homepageData.offerSliderImageThree, 'link': homepageData.offerSliderImageThreeLink},
-      {'image': homepageData.offerSliderImageFour, 'link': homepageData.offerSliderImageFourLink},
+      {
+        'image': homepageData.offerSliderImageOne,
+        'link': homepageData.offerSliderImageOneLink
+      },
+      {
+        'image': homepageData.offerSliderImageTwo,
+        'link': homepageData.offerSliderImageTwoLink
+      },
+      {
+        'image': homepageData.offerSliderImageThree,
+        'link': homepageData.offerSliderImageThreeLink
+      },
+      {
+        'image': homepageData.offerSliderImageFour,
+        'link': homepageData.offerSliderImageFourLink
+      },
     ];
 
     return Container(
@@ -1082,13 +1070,14 @@ class _HomeScreenState extends State<HomeScreen> {
           return GestureDetector(
             onTap: item['link'] != null
                 ? () async {
-              final url = Uri.parse(item['link']!);
-              if (await canLaunchUrl(url)) {
-                await launchUrl(url, mode: LaunchMode.externalApplication);
-              } else {
-                print('Could not launch ${item['link']}');
-              }
-            }
+                    final url = Uri.parse(item['link']!);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    } else {
+                      print('Could not launch ${item['link']}');
+                    }
+                  }
                 : null,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 5),
@@ -1098,10 +1087,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                   item['image']!,
+                  item['image']!,
                   fit: BoxFit.cover,
                   width: double.infinity,
-                 /* placeholder: (context, url) => Center(
+                  /* placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(),
                   ),
                   errorWidget: (context, url, error) {
@@ -1119,10 +1108,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBottomSlider(HomepageData homepageData) {
     final sliderItems = [
-      {'image': homepageData.bottomBannerSliderOne, 'link': homepageData.bottomBannerSliderOneLink},
-      {'image': homepageData.bottomBannerSliderTwo, 'link': homepageData.bottomBannerSliderTwoLink},
-      {'image': homepageData.bottomBannerSliderThree, 'link': homepageData.bottomBannerSliderThreeLink},
-      {'image': homepageData.bottomBannerSliderFour, 'link': homepageData.bottomBannerSliderFourLink},
+      {
+        'image': homepageData.bottomBannerSliderOne,
+        'link': homepageData.bottomBannerSliderOneLink
+      },
+      {
+        'image': homepageData.bottomBannerSliderTwo,
+        'link': homepageData.bottomBannerSliderTwoLink
+      },
+      {
+        'image': homepageData.bottomBannerSliderThree,
+        'link': homepageData.bottomBannerSliderThreeLink
+      },
+      {
+        'image': homepageData.bottomBannerSliderFour,
+        'link': homepageData.bottomBannerSliderFourLink
+      },
     ];
 
     return Container(
@@ -1142,13 +1143,14 @@ class _HomeScreenState extends State<HomeScreen> {
           return GestureDetector(
             onTap: item['link'] != null
                 ? () async {
-              final url = Uri.parse(item['link']!);
-              if (await canLaunchUrl(url)) {
-                await launchUrl(url, mode: LaunchMode.externalApplication);
-              } else {
-                print('Could not launch ${item['link']}');
-              }
-            }
+                    final url = Uri.parse(item['link']!);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    } else {
+                      print('Could not launch ${item['link']}');
+                    }
+                  }
                 : null,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 5),
@@ -1221,71 +1223,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /*Widget _buildCoupon(String discount, String code, String imageUrl) {
-    return Container(
-      margin: EdgeInsets.only(right: 10.0),
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Color(0XFFf3faff),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: TColors.info.withOpacity(0.5),
-        ),
-      ),
-      width: 200,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: Color(0xFFf4f4f5),
-            ),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.contain,
-              width: 50,
-              height: 50,
-            ),
-          ),
-          SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                discount,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                decoration: BoxDecoration(
-                  color: TColors.white,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      code,
-                      style: TextStyle(
-                        color: TColors.primaryColor,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }*/
   Widget _buildCoupon(String discount, String code, String imageUrl) {
     return Container(
       margin: EdgeInsets.only(right: 10.0),
@@ -1320,7 +1257,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                discount,
+                "$discount Off",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,
